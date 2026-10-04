@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6ccc0ca6ddebbd844a5609cccc90d3cf
+timeCreated: 1547899242
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68398
+  packageName: Cartoon Ground and Floor Textures
+  packageVersion: 4.0.0
+  assetPath: Assets/Cartoon Textures/Materials/BuiltIn/FlowerCover.mat
+  uploadId: 798988

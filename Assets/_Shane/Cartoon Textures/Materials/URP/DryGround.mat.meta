@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5e33cefb07a520e47956e839c8ad346b
+timeCreated: 1469821537
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68398
+  packageName: Cartoon Ground and Floor Textures
+  packageVersion: 4.0.0
+  assetPath: Assets/Cartoon Textures/Materials/URP/DryGround.mat
+  uploadId: 798988
