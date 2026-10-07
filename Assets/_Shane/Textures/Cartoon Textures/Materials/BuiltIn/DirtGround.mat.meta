@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: acf5cb33127bd284594cb1e49a6f078b
+timeCreated: 1469821476
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68398
+  packageName: Cartoon Ground and Floor Textures
+  packageVersion: 4.0.0
+  assetPath: Assets/Cartoon Textures/Materials/BuiltIn/DirtGround.mat
+  uploadId: 798988

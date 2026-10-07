@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3831fd592e0af04428c551019e5bb1b0
+timeCreated: 1469821569
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68398
+  packageName: Cartoon Ground and Floor Textures
+  packageVersion: 4.0.0
+  assetPath: Assets/Cartoon Textures/Materials/URP/LavaGround.mat
+  uploadId: 798988
