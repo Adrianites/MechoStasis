@@ -49,5 +49,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   timeBetweenWaves: 5
-  timeBetweenSpawns: 0.5
+  timeBetweenSpawns: 1
   baseCount: 3

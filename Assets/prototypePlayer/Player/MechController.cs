@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MechController : MonoBehaviour, IDamageable
 {
@@ -67,6 +68,17 @@ public class MechController : MonoBehaviour, IDamageable
     private float movementImpulseTimer;
     private float previousVerticalVelocity;
     private bool wasGrounded;
+
+    [Header ("Shooting")]
+    private bool attackHeld;
+    private bool canShoot;
+    [SerializeField] GameObject projectilePrefab;
+    [SerializeField] Transform muzzle;
+    [SerializeField] float speed = 25f;
+    [SerializeField] float fireRate = 8f;
+    float nextFire;
+    private Coroutine attackCoroutine;
+    public CinemachineImpulseSource shootingImpulseSource;
 
     private void Start()
     {
@@ -298,6 +310,68 @@ public class MechController : MonoBehaviour, IDamageable
         return Mathf.DeltaAngle(0f, pitch);
     }
 
+    private void OnAttackInput()
+    {
+        Debug.Log("StartedShooting");
+        if (isDead)
+        {
+            return;
+        }
+
+        attackHeld = true;
+        if (attackCoroutine == null)
+        {
+            attackCoroutine = StartCoroutine(AttackLoop());
+        }
+    }
+
+    private void OnAttackInputCanceled()
+    {
+        attackHeld = false;
+        Debug.Log("StoppedShooting");
+    }
+
+    private IEnumerator AttackLoop()
+    {
+        while (attackHeld)
+        {
+            if (canShoot)
+            {
+                StartCoroutine(GunShoot(fireRate));
+            }
+            yield return null;
+        }
+        attackCoroutine = null;
+    }
+
+    private IEnumerator GunShoot(float time)
+    {
+        Debug.Log("GunShoot");
+        canShoot = false;
+        CameraShakeManager.instance.CameraShake(shootingImpulseSource);
+        SpawnProjectile(projectilePrefab, muzzle, 1f);
+        yield return new WaitForSeconds(time);
+        canShoot = true;
+    }
+
+    private void SpawnProjectile(GameObject ProjectilePrefab, Transform spawnPoint, float speed)
+    {
+        Debug.Log("Shooting");
+        if (ProjectilePrefab == null || spawnPoint == null)
+        {
+            return;
+        }
+
+        Projectile projectileSettings = ProjectilePrefab.GetComponent<Projectile>();
+
+        GameObject projectileInstance = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
+        Rigidbody rb = projectileInstance.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = spawnPoint.up * speed;
+        }
+    }
+
     private void OnEnable()
     {
         if (playerInputHandler == null)
@@ -305,6 +379,8 @@ public class MechController : MonoBehaviour, IDamageable
 
         playerInputHandler.OnJumpPerformed += OnJumpInput;
         playerInputHandler.OnJumpCanceled += OnJumpInputCanceled;
+        playerInputHandler.OnAttackPerformed += OnAttackInput; 
+        playerInputHandler.OnAttackCanceled += OnAttackInputCanceled;
     }
 
     private void OnDisable()
@@ -314,6 +390,8 @@ public class MechController : MonoBehaviour, IDamageable
 
         playerInputHandler.OnJumpPerformed -= OnJumpInput;
         playerInputHandler.OnJumpCanceled -= OnJumpInputCanceled;
+        playerInputHandler.OnAttackPerformed -= OnAttackInput;
+        playerInputHandler.OnAttackCanceled -= OnAttackInputCanceled;
     }
 
     private void OnJumpInput()
