@@ -36,6 +36,7 @@ public class MechController : MonoBehaviour, IDamageable
     [Header("Health")]
     [SerializeField] private int health = 10;
     [SerializeField] private bool isDead = false;
+    [SerializeField] public bool isInvincible = false;
     [SerializeField] private Slider healthSlider;
 
     [Header("References")]
@@ -71,8 +72,16 @@ public class MechController : MonoBehaviour, IDamageable
     private float previousVerticalVelocity;
     private bool wasGrounded;
 
-    private void Start()
+    private void Awake()
     {
+        if (deathCanvas != null)
+        {
+            deathCanvas.SetActive(false);
+        }
+    }
+
+    private void Start()
+    {   
         if (healthSlider != null)
         {
             healthSlider.maxValue = health;
@@ -118,6 +127,9 @@ public class MechController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
+        if (isInvincible || isDead)
+            return;
+
         health -= damage;
 
         if (healthSlider != null)

@@ -592,7 +592,7 @@
                     "name": "",
                     "id": "3700d0a9-1573-4fcc-8484-9577d755abc4",
                     "path": "<Keyboard>/leftShift",
-                    "interactions": "MultiTap(tapDelay=0.5)",
+                    "interactions": "MultiTap(tapTime=0.5,tapDelay=1)",
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
