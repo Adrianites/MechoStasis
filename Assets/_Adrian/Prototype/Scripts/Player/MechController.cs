@@ -278,7 +278,12 @@ public class MechController : MonoBehaviour, IDamageable
 
             if (mainCam != null)
             {
-                mainCam.transform.localRotation = mainCamRestRotation * Quaternion.Euler(mainCameraPitch, 0f, 0f);
+                Quaternion targetRotation = mainCamRestRotation * Quaternion.Euler(mainCameraPitch, 0f, 0f);
+                mainCam.transform.localRotation = Quaternion.Slerp(
+                    mainCam.transform.localRotation,
+                    targetRotation,
+                    cameraReturnSpeed * Time.deltaTime
+                );
             }
         }
         
