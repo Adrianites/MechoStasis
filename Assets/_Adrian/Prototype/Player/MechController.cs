@@ -1,13 +1,19 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class MechController : MonoBehaviour, IDamageable
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float airControlMultiplier = 0.5f;
+    [SerializeField] private float sprintMultiplier = 1.5f;
+
+    [Header("Dash")]
+    [SerializeField] private float dashSpeed = 10f;
+    [SerializeField] private float dashDuration = 0.15f;
+    [SerializeField] private float dashCooldown = 0.75f;
+    [SerializeField] private Slider dashCooldownSlider;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 5f;
@@ -19,26 +25,18 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private float upDownLookRange = 80f;
     [SerializeField] private float cameraReturnSpeed = 8f;
 
-    [Header("Mech Camera Impulses")]
-    [SerializeField] private CinemachineImpulseSource movementImpulseSource;
-    [SerializeField] private CinemachineImpulseSource accelerationImpulseSource;
-    [SerializeField] private CinemachineImpulseSource jumpImpulseSource;
-    [SerializeField] private CinemachineImpulseSource landingImpulseSource;
+    [Header("Cockpit Motion")]
+    [SerializeField] private float cockpitPositionSway = 0.02f;
+    [SerializeField] private float cockpitRotationSway = 1.25f;
+    [SerializeField] private float cockpitBobAmount = 0.01f;
+    [SerializeField] private float cockpitBobFrequency = 8f;
+    [SerializeField] private float cockpitMotionSmooth = 10f;
+    [SerializeField] private bool CockpitRotate = false;
 
-    [SerializeField] private float movementImpulseInterval = 0.45f;
-
-    [SerializeField] private float movementImpulseSpeedThreshold = 0.25f;
-
-    [SerializeField] private float accelerationImpulseThreshold = 2f;
-
-    [SerializeField] private float landingSpeedThreshold = 4f;
-
-    [SerializeField] private float accelerationImpulseStrength = 1f;
-
-    [SerializeField] private float landingImpulseStrength = 1f;
-
+    [Header("Health")]
     [SerializeField] private int health = 10;
     [SerializeField] private bool isDead = false;
+    [SerializeField] private Slider healthSlider;
 
     [Header("References")]
     [SerializeField] private CharacterController characterController;
@@ -48,37 +46,30 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private InputHandler playerInputHandler;
     [SerializeField] private GameObject deathCanvas;
     [SerializeField] private GameObject healthCanvas;
-    [SerializeField] private Slider healthSlider;
 
-    public bool CockpitRotate = false;
 
     private CinemachineImpulseListener cockpitImpulseListener;
     private Quaternion mainCamRestRotation;
     private Quaternion cockpitCamRestRotation;
+    private Vector3 cockpitCamRestPosition;
     private float mainCameraPitch;
     private float cockpitCameraPitch;
     private float cockpitCameraYaw;
+    private Vector3 cockpitCameraPositionOffset;
+    private Vector3 cockpitCameraRotationOffset;
 
     private Vector3 currentMovement;
     private float coyoteTimeCounter;
     private bool jumpRequested;
-    private bool returningMainCamera;
+    private bool dashRequested;
+    private float dashTimer;
+    private float dashCooldownTimer;
+    private Vector3 dashDirection;
 
     private Vector3 previousHorizontalVelocity;
     private float movementImpulseTimer;
     private float previousVerticalVelocity;
     private bool wasGrounded;
-
-    [Header ("Shooting")]
-    private bool attackHeld;
-    private bool canShoot;
-    [SerializeField] GameObject projectilePrefab;
-    [SerializeField] Transform muzzle;
-    [SerializeField] float speed = 25f;
-    [SerializeField] float fireRate = 8f;
-    float nextFire;
-    private Coroutine attackCoroutine;
-    public CinemachineImpulseSource shootingImpulseSource;
 
     private void Start()
     {
@@ -87,6 +78,15 @@ public class MechController : MonoBehaviour, IDamageable
             healthSlider.maxValue = health;
             healthSlider.value = health;
         }
+
+        if (dashCooldownSlider != null)
+        {
+            dashCooldownSlider.maxValue = dashCooldown;
+            dashCooldownSlider.value = dashCooldown;
+        }
+
+        dashCooldownTimer = dashCooldown;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -110,6 +110,7 @@ public class MechController : MonoBehaviour, IDamageable
             }
             
             cockpitCamRestRotation = cockpitCam.transform.localRotation;
+            cockpitCamRestPosition = cockpitCam.transform.localPosition;
             cockpitCameraPitch = NormalizePitch(cockpitCamRestRotation.eulerAngles.x);
             cockpitCameraYaw = NormalizePitch(cockpitCamRestRotation.eulerAngles.y);
         }
@@ -147,9 +148,17 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void HandleMovement()
     {
+        dashCooldownTimer = Mathf.Min(dashCooldown, dashCooldownTimer + Time.deltaTime);
+
+        if (dashCooldownSlider != null)
+        {
+            dashCooldownSlider.value = dashCooldownTimer;
+        }
+
         bool groundedBeforeMove = characterController.isGrounded;
 
         Vector2 input = playerInputHandler.MovementInput;
+        bool sprinting = playerInputHandler.SprintTriggered;
 
         Vector3 inputDirection = new Vector3(input.x, 0f, input.y);
         Vector3 worldDirection = transform.TransformDirection(inputDirection);
@@ -158,11 +167,28 @@ public class MechController : MonoBehaviour, IDamageable
             worldDirection.Normalize();
 
         Vector3 horizontalVelocity;
+        float effectiveMoveSpeed = moveSpeed * (sprinting ? sprintMultiplier : 1f);
 
-        if (groundedBeforeMove)
+        if (dashRequested && dashCooldownTimer >= dashCooldown)
+        {
+            dashRequested = false;
+            dashTimer = dashDuration;
+            dashCooldownTimer = 0f;
+
+            dashDirection = worldDirection.sqrMagnitude > 0.001f
+                ? worldDirection.normalized
+                : transform.forward;
+        }
+
+        if (dashTimer > 0f)
+        {
+            dashTimer -= Time.deltaTime;
+            horizontalVelocity = dashDirection * dashSpeed;
+        }
+        else if (groundedBeforeMove)
         {
             coyoteTimeCounter = coyoteTime;
-            horizontalVelocity = worldDirection * moveSpeed;
+            horizontalVelocity = worldDirection * effectiveMoveSpeed;
 
             if (currentMovement.y < 0f)
                 currentMovement.y = -0.5f;
@@ -174,7 +200,7 @@ public class MechController : MonoBehaviour, IDamageable
             if (worldDirection.sqrMagnitude > 0.001f)
             {
                 horizontalVelocity =
-                    worldDirection * moveSpeed * airControlMultiplier;
+                    worldDirection * effectiveMoveSpeed * airControlMultiplier;
             }
             else
             {
@@ -217,57 +243,8 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void HandleRotation()
     {
-        bool cockpitLookHeld = playerInputHandler.SprintTriggered;
-
-        if (cockpitLookHeld != CockpitRotate)
-        {
-            CockpitRotate = cockpitLookHeld;
-
-            if (CockpitRotate)
-            {
-                returningMainCamera = false;
-
-                if (cockpitCam != null)
-                {
-                    cockpitCam.transform.localRotation = cockpitCamRestRotation;
-                    cockpitCameraPitch = NormalizePitch(cockpitCamRestRotation.eulerAngles.x);
-                    cockpitCameraYaw = NormalizePitch(cockpitCamRestRotation.eulerAngles.y);
-                }
-            }
-            else
-            {
-                returningMainCamera = true;
-            }
-        }
-
-        if (returningMainCamera)
-        {
-            if (mainCam == null)
-            {
-                returningMainCamera = false;
-                return;
-            }
-
-            mainCam.transform.localRotation = Quaternion.Slerp(
-                mainCam.transform.localRotation,
-                mainCamRestRotation,
-                cameraReturnSpeed * Time.deltaTime
-            );
-
-            if (Quaternion.Angle(mainCam.transform.localRotation, mainCamRestRotation) <= 0.1f)
-            {
-                mainCam.transform.localRotation = mainCamRestRotation;
-                mainCameraPitch = NormalizePitch(mainCamRestRotation.eulerAngles.x);
-                returningMainCamera = false;
-            }
-
-            if (cockpitCam != null)
-            {
-                cockpitCam.transform.localRotation = cockpitCamRestRotation;
-            }
-
-            return;
-        }
+        bool cockpitLookHeld = playerInputHandler.UnlockCockpitCamTriggered;
+        CockpitRotate = cockpitLookHeld;
 
         Vector2 lookInput = playerInputHandler.RotationInput;
 
@@ -275,101 +252,78 @@ public class MechController : MonoBehaviour, IDamageable
 
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
 
-        if (!CockpitRotate)
-            transform.Rotate(Vector3.up * mouseX);
-
         if (CockpitRotate)
         {
             cockpitCameraYaw += mouseX;
             cockpitCameraPitch = Mathf.Clamp
             (cockpitCameraPitch - mouseY, -upDownLookRange, upDownLookRange);
+
+            if (mainCam != null)
+            {
+                mainCam.transform.localRotation = mainCamRestRotation;
+            }
         }
         else
         {
-            mainCameraPitch = Mathf.Clamp
-            (mainCameraPitch - mouseY, -upDownLookRange, upDownLookRange);
-        }
+            transform.Rotate(Vector3.up * mouseX);
 
-        if (mainCam != null && !CockpitRotate)
-        {
-            mainCam.transform.localRotation = mainCamRestRotation * Quaternion.Euler(mainCameraPitch, 0f, 0f);
+            mainCameraPitch = Mathf.Clamp(
+                mainCameraPitch - mouseY,
+                -upDownLookRange,
+                upDownLookRange
+            );
+
+            cockpitCameraYaw = Mathf.Lerp(cockpitCameraYaw, 0f, cameraReturnSpeed * Time.deltaTime);
+            cockpitCameraPitch = Mathf.Lerp(cockpitCameraPitch, 0f, cameraReturnSpeed * Time.deltaTime);
+
+            if (mainCam != null)
+            {
+                mainCam.transform.localRotation = mainCamRestRotation * Quaternion.Euler(mainCameraPitch, 0f, 0f);
+            }
         }
         
-        if (cockpitCam != null && CockpitRotate)
+        if (cockpitCam != null)
         {
-            cockpitCam.transform.localRotation = cockpitCamRestRotation * Quaternion.Euler(cockpitCameraPitch, cockpitCameraYaw, 0f);
+            UpdateCockpitMotion();
+
+            Quaternion cockpitLookRotation = cockpitCamRestRotation * Quaternion.Euler(cockpitCameraPitch, cockpitCameraYaw, 0f);
+            Quaternion cockpitSwayRotation = Quaternion.Euler(cockpitCameraRotationOffset);
+
+            cockpitCam.transform.localRotation = cockpitLookRotation * cockpitSwayRotation;
+            cockpitCam.transform.localPosition = cockpitCamRestPosition + cockpitCameraPositionOffset;
         }
-        else if (cockpitCam != null && !CockpitRotate)
+    }
+
+    private void UpdateCockpitMotion()
+    {
+        if (cockpitCam == null)
         {
-            cockpitCam.transform.localRotation = cockpitCamRestRotation;
+            return;
         }
+
+        Vector3 localVelocity = transform.InverseTransformDirection(new Vector3(currentMovement.x, 0f, currentMovement.z));
+        float movePercent = Mathf.Clamp01(localVelocity.magnitude / Mathf.Max(0.01f, moveSpeed));
+
+        Vector3 targetPositionOffset = new Vector3(
+            -localVelocity.x * cockpitPositionSway,
+            Mathf.Sin(Time.time * cockpitBobFrequency) * cockpitBobAmount * movePercent,
+            -localVelocity.z * cockpitPositionSway
+        );
+
+        Vector3 targetRotationOffset = new Vector3(
+            localVelocity.z * cockpitRotationSway,
+            0f,
+            -localVelocity.x * cockpitRotationSway
+        );
+
+        float smoothFactor = cockpitMotionSmooth * Time.deltaTime;
+        cockpitCameraPositionOffset = Vector3.Lerp(cockpitCameraPositionOffset, targetPositionOffset, smoothFactor);
+        cockpitCameraRotationOffset = Vector3.Lerp(cockpitCameraRotationOffset, targetRotationOffset, smoothFactor);
     }
 
     private float NormalizePitch(float pitch)
     {
         return Mathf.DeltaAngle(0f, pitch);
-    }
-
-    private void OnAttackInput()
-    {
-        Debug.Log("StartedShooting");
-        if (isDead)
-        {
-            return;
-        }
-
-        attackHeld = true;
-        if (attackCoroutine == null)
-        {
-            attackCoroutine = StartCoroutine(AttackLoop());
-        }
-    }
-
-    private void OnAttackInputCanceled()
-    {
-        attackHeld = false;
-        Debug.Log("StoppedShooting");
-    }
-
-    private IEnumerator AttackLoop()
-    {
-        while (attackHeld)
-        {
-            if (canShoot)
-            {
-                StartCoroutine(GunShoot(fireRate));
-            }
-            yield return null;
-        }
-        attackCoroutine = null;
-    }
-
-    private IEnumerator GunShoot(float time)
-    {
-        Debug.Log("GunShoot");
-        canShoot = false;
-        CameraShakeManager.instance.CameraShake(shootingImpulseSource);
-        SpawnProjectile(projectilePrefab, muzzle, 1f);
-        yield return new WaitForSeconds(time);
-        canShoot = true;
-    }
-
-    private void SpawnProjectile(GameObject ProjectilePrefab, Transform spawnPoint, float speed)
-    {
-        Debug.Log("Shooting");
-        if (ProjectilePrefab == null || spawnPoint == null)
-        {
-            return;
-        }
-
-        Projectile projectileSettings = ProjectilePrefab.GetComponent<Projectile>();
-
-        GameObject projectileInstance = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
-        Rigidbody rb = projectileInstance.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = spawnPoint.up * speed;
-        }
     }
 
     private void OnEnable()
@@ -379,8 +333,7 @@ public class MechController : MonoBehaviour, IDamageable
 
         playerInputHandler.OnJumpPerformed += OnJumpInput;
         playerInputHandler.OnJumpCanceled += OnJumpInputCanceled;
-        playerInputHandler.OnAttackPerformed += OnAttackInput; 
-        playerInputHandler.OnAttackCanceled += OnAttackInputCanceled;
+        playerInputHandler.OnDashPerformed += OnDashInput;
     }
 
     private void OnDisable()
@@ -390,8 +343,7 @@ public class MechController : MonoBehaviour, IDamageable
 
         playerInputHandler.OnJumpPerformed -= OnJumpInput;
         playerInputHandler.OnJumpCanceled -= OnJumpInputCanceled;
-        playerInputHandler.OnAttackPerformed -= OnAttackInput;
-        playerInputHandler.OnAttackCanceled -= OnAttackInputCanceled;
+        playerInputHandler.OnDashPerformed -= OnDashInput;
     }
 
     private void OnJumpInput()
@@ -402,5 +354,10 @@ public class MechController : MonoBehaviour, IDamageable
     private void OnJumpInputCanceled()
     {
         jumpRequested = false;
+    }
+
+    private void OnDashInput()
+    {
+        dashRequested = true;
     }
 }

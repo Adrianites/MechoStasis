@@ -18,7 +18,7 @@ public class WaveSpawner : MonoBehaviour
         while (true)
         {
             Wave++;
-            int count = baseCount + Wave * 2; // simple difficulty ramp
+            int count = baseCount + Wave * 2;
             Debug.Log($"Wave {Wave}: spawning {count}");
 
             for (int i = 0; i < count; i++)

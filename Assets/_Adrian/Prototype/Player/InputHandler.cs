@@ -14,12 +14,14 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private string rotation = "Look";
     [SerializeField] private string jump = "Jump";
     [SerializeField] private string attack = "Attack";
+    [SerializeField] private string pickup = "Pickup";
     [SerializeField] private string sprint = "Sprint";
+    [SerializeField] private string unlockCockpitCam = "UnlockCockpitCam";
     [SerializeField] private string interact = "Interact";
     [SerializeField] private string switchWeapon = "SwitchWeapon";
     [SerializeField] private string pauseGame = "Pause";
     [SerializeField] private string dash = "Dash";
-    [SerializeField] private string hammerAttack = "HammerAttack";
+    [SerializeField] private string meleeAttack = "MeleeAttack";
     [SerializeField] private string inventoryToggle = "Inventory";
     [SerializeField] private string grapple = "Grapple";
 
@@ -27,12 +29,14 @@ public class InputHandler : MonoBehaviour
     private InputAction rotationAction;
     private InputAction jumpAction;
     private InputAction attackAction;
+    private InputAction pickupAction;
     private InputAction sprintAction;
+    private InputAction unlockCockpitCamAction;
     private InputAction interactAction;
     private InputAction switchWeaponAction;
     private InputAction pauseGameAction;
     private InputAction dashAction;
-    private InputAction hammerAttackAction;
+    private InputAction meleeAttackAction;
     private InputAction inventoryToggleAction;
     private InputAction grappleAction;
 
@@ -40,12 +44,14 @@ public class InputHandler : MonoBehaviour
     public Vector2 RotationInput {get; private set;}
     public bool JumpTriggered {get; private set;}
     public bool AttackTriggered {get; private set;}
+    public bool PickupTriggered {get; private set;}
     public bool SprintTriggered {get; private set;}
+    public bool UnlockCockpitCamTriggered {get; private set;}
     public bool InteractTriggered {get; private set;}
     public float SwitchWeaponTriggered {get; private set;}
     public bool PauseGameTriggered {get; private set;}
     public bool DashTriggered {get; private set;}
-    public bool HammerAttackTriggered {get; private set;}
+    public bool MeleeAttackTriggered {get; private set;}
     public bool InventoryToggleTriggered {get; private set;}
     public bool GrappleTriggered {get; private set;}
 
@@ -53,11 +59,12 @@ public class InputHandler : MonoBehaviour
     public event System.Action OnJumpCanceled;
     public event System.Action OnAttackPerformed;
     public event System.Action OnAttackCanceled;
+    public event System.Action OnPickupPerformed;
     public event System.Action OnInteractPerformed;
     public event System.Action<float> OnSwitchWeaponPerformed;
     public event System.Action OnPausePerformed;
     public event System.Action OnDashPerformed;
-    public event System.Action OnHammerAttackPerformed;
+    public event System.Action OnMeleeAttackPerformed;
     public event System.Action OnInventoryTogglePerformed;
     public event System.Action OnGrapplePerformed;
 
@@ -69,12 +76,14 @@ public class InputHandler : MonoBehaviour
         rotationAction = mapReference.FindAction(rotation);
         jumpAction = mapReference.FindAction(jump);
         attackAction = mapReference.FindAction(attack);
+        pickupAction = mapReference.FindAction(pickup);
         sprintAction = mapReference.FindAction(sprint);
+        unlockCockpitCamAction = mapReference.FindAction(unlockCockpitCam);
         interactAction = mapReference.FindAction(interact);
         pauseGameAction = mapReference.FindAction(pauseGame);
         switchWeaponAction = mapReference.FindAction(switchWeapon);
         dashAction = mapReference.FindAction(dash);
-        hammerAttackAction = mapReference.FindAction(hammerAttack);
+        meleeAttackAction = mapReference.FindAction(meleeAttack);
         inventoryToggleAction = mapReference.FindAction(inventoryToggle);
         grappleAction = mapReference.FindAction(grapple);
 
@@ -95,8 +104,14 @@ public class InputHandler : MonoBehaviour
         attackAction.performed += inputInfo => { AttackTriggered = true; OnAttackPerformed?.Invoke(); };
         attackAction.canceled += inputInfo => { AttackTriggered = false; OnAttackCanceled?.Invoke(); };
 
+        pickupAction.performed += inputInfo => { PickupTriggered = true; OnPickupPerformed?.Invoke(); };
+        pickupAction.canceled += inputInfo => PickupTriggered = false;
+
         sprintAction.performed += inputInfo => SprintTriggered = true;
         sprintAction.canceled += inputInfo => SprintTriggered = false;
+
+        unlockCockpitCamAction.performed += inputInfo => UnlockCockpitCamTriggered = true;
+        unlockCockpitCamAction.canceled += inputInfo => UnlockCockpitCamTriggered = false;
 
         interactAction.performed += inputInfo => { InteractTriggered = true; OnInteractPerformed?.Invoke(); };
         interactAction.canceled += inputInfo => InteractTriggered = false;
@@ -110,8 +125,8 @@ public class InputHandler : MonoBehaviour
         dashAction.performed += inputInfo => { DashTriggered = true; OnDashPerformed?.Invoke(); };
         dashAction.canceled += inputInfo => DashTriggered = false;
 
-        hammerAttackAction.performed += inputInfo => { HammerAttackTriggered = true; OnHammerAttackPerformed?.Invoke(); };
-        hammerAttackAction.canceled += inputInfo => HammerAttackTriggered = false;
+        meleeAttackAction.performed += inputInfo => { MeleeAttackTriggered = true; OnMeleeAttackPerformed?.Invoke(); };
+        meleeAttackAction.canceled += inputInfo => MeleeAttackTriggered = false;
 
         inventoryToggleAction.performed += inputInfo => { InventoryToggleTriggered = true; OnInventoryTogglePerformed?.Invoke(); };
         inventoryToggleAction.canceled += inputInfo => InventoryToggleTriggered = false;
