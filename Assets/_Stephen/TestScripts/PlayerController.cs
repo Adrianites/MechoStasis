@@ -86,11 +86,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleLooking(Vector2 mouseDelta)
     {
-        lookAngle += mouseDelta.y * LookSensitivity;
+        lookAngle += -mouseDelta.y * LookSensitivity;
         lookAngle = Mathf.Clamp(lookAngle, -LookAngleLimit, LookAngleLimit);
 
-        mainCamera.transform.localRotation = Quaternion.Euler(lookAngle, 0f, 0f);
-        transform.rotation *= Quaternion.Euler(0f, mouseDelta.x * LookSensitivity, 0f);
+        mainCamera.transform.localRotation = Quaternion.Euler(lookAngle, 0, 0);
+        transform.rotation *= Quaternion.Euler(0f, mouseDelta.x * LookSensitivity, 0);
 
     }
 
