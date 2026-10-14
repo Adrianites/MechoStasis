@@ -10,6 +10,8 @@ public class GunVarient1 : MonoBehaviour, IGun
     [SerializeField] private Transform muzzle;
     [SerializeField] private CinemachineImpulseSource shootingImpulseSource;
 
+    [SerializeField] public ObjectPool bulletpool;
+
     [Header("Shooting")]
     [SerializeField] private float speed = 25f;
     [SerializeField] private float fireRate = 8f;
@@ -110,6 +112,8 @@ public class GunVarient1 : MonoBehaviour, IGun
 
     private void SpawnProjectile(GameObject projectilePrefab, Transform spawnPoint, float projectileSpeed)
     {
+        GameObject projectilePrefabInstance = bulletpool.GetObject();
+        
         GameObject projectileInstance = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
 
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
@@ -124,5 +128,13 @@ public class GunVarient1 : MonoBehaviour, IGun
         {
             rigidbody.linearVelocity = spawnPoint.up * projectileSpeed;
         }
+
+        StartCoroutine(DeactivateBullet(projectilePrefab));
+    }
+
+    IEnumerator DeactivateBullet(GameObject projectilePrefab)
+    {
+        yield return new WaitForSeconds(2f);
+        bulletpool.ReturnObject(projectilePrefab);
     }
 }
