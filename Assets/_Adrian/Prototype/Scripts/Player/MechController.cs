@@ -39,6 +39,12 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] public bool isInvincible = false;
     [SerializeField] private Slider healthSlider;
 
+    [Header("Grapple Parameters")]
+    public bool grappleTime = false;
+    [SerializeField] private Sprite grappleSprite;
+    private float externalVelocityTimer;
+    [SerializeField] private float externalVelocityControlDuration = 0.25f;
+
     [Header("References")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private CinemachineCamera mainCam;
@@ -341,6 +347,12 @@ public class MechController : MonoBehaviour, IDamageable
     private float NormalizePitch(float pitch)
     {
         return Mathf.DeltaAngle(0f, pitch);
+    }
+
+    public void SetExternalVelocity(Vector3 velocity)
+    {
+        currentMovement = velocity;
+        externalVelocityTimer = externalVelocityControlDuration;
     }
 
     private void OnEnable()
