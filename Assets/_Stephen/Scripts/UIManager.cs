@@ -23,6 +23,11 @@ public class UIMananger : MonoBehaviour
             playerInputHandler = FindObjectsByType<InputHandler>(FindObjectsSortMode.None)[0];
         }
 
+        if (pauseMenu == null)
+        {
+            pauseMenu = GameObject.Find("PauseCanvas");
+        }
+
         //deathMenu.SetActive(false);
         Time.timeScale = 1f;
     }
