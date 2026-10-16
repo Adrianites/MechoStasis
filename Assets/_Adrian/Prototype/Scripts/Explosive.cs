@@ -8,6 +8,7 @@ public class Explosive : MonoBehaviour, IDamageable
     public float explosionRadius = 5f;
     public GameObject explosionEffect;
     public float delayBeforeDestroy = 0.1f;
+    public bool exploded = false;
 
     public void TakeDamage(int damage)
     {
@@ -20,6 +21,13 @@ public class Explosive : MonoBehaviour, IDamageable
 
     public void Explode()
     {
+        if (exploded)
+        {
+            return;
+        }
+
+        exploded = true;
+        
         if (explosionEffect != null)
         {
             Instantiate(explosionEffect, transform.position, Quaternion.identity);
