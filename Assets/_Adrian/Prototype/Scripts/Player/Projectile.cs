@@ -18,5 +18,10 @@ public class Projectile : MonoBehaviour
         {
             other.GetComponent<enemyAI>().TakeDamage(damage);
         }
+
+        if (other.CompareTag("Explosive"))
+        {
+            other.GetComponent<Explosive>().TakeDamage(damage);
+        }
     }
 }

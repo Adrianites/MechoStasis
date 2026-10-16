@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         ObjectivesDone++;
 
-        if (ObjectivesDone >= TotalObjectives)
+        if (ObjectivesDone == TotalObjectives)
         {
             Debug.Log("All objectives completed!");
             winCanvas.SetActive(true);

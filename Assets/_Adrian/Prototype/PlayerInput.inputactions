@@ -591,8 +591,8 @@
                 {
                     "name": "",
                     "id": "3700d0a9-1573-4fcc-8484-9577d755abc4",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "MultiTap(tapTime=0.5,tapDelay=1)",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Dash",

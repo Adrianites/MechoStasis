@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 7794902951788683769}
   - component: {fileID: 1712127179043761122}
   - component: {fileID: 566016293341969040}
+  - component: {fileID: 8958792784885332137}
   m_Layer: 3
   m_Name: PickupObject
-  m_TagString: Untagged
+  m_TagString: Explosive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.91559, y: -0, z: -0.49393}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6246, y: 1.6246, z: 1.6246}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -140,3 +141,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8958792784885332137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9153259590877702212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42df468370899a549a1a5bf2a5f1e089, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  health: 2
+  damage: 5
+  explosionRadius: 5
+  explosionEffect: {fileID: 0}
