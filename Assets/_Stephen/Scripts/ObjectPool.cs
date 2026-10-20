@@ -1,34 +1,38 @@
-using UnityEngine;
 using System.Collections.Generic;
-
+using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    public GameObject prefab;
+    [SerializeField] private GameObject prefab;
     private Queue<GameObject> pool = new Queue<GameObject>();
 
-    public GameObject GetObject()
+    public GameObject GetObject(Vector3 position, Quaternion rotation)
     {
+        GameObject obj;
+
         if (pool.Count > 0)
         {
-            GameObject obj = pool.Dequeue();
-            obj.SetActive(true);
-            return obj;
+            obj = pool.Dequeue();
         }
         else
         {
-            return Instantiate(prefab);
+            obj = Instantiate(prefab);
         }
-    } 
+
+        Projectile projectile = obj.GetComponent<Projectile>();
+        if (projectile != null)
+        {
+            projectile.SetPool(this);
+        }
+
+        obj.transform.SetPositionAndRotation(position, rotation);
+        obj.SetActive(true);
+        return obj;
+    }
 
     public void ReturnObject(GameObject obj)
     {
         obj.SetActive(false);
         pool.Enqueue(obj);
     }
-
-
-
-
-
 }
