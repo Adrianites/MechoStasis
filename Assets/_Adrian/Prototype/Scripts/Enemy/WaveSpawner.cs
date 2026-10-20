@@ -4,6 +4,7 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     [SerializeField] GameObject enemyPrefab;
+    [SerializeField] ObjectPool enemyPool;
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] float timeBetweenWaves = 5f;
     [SerializeField] float timeBetweenSpawns = 0.5f;
@@ -24,7 +25,15 @@ public class WaveSpawner : MonoBehaviour
             for (int i = 0; i < count; i++)
             {
                 var point = spawnPoints[Random.Range(0, spawnPoints.Length)];
-                Instantiate(enemyPrefab, point.position, point.rotation);
+                if (enemyPool != null)
+                {
+                    enemyPool.GetObject(point.position, point.rotation);
+                }
+                else
+                {
+                    Instantiate(enemyPrefab, point.position, point.rotation);
+                }
+
                 yield return new WaitForSeconds(timeBetweenSpawns);
             }
             yield return new WaitForSeconds(timeBetweenWaves);

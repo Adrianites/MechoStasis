@@ -8,7 +8,9 @@ public class enemyAI : MonoBehaviour, IDamageable
     [SerializeField] float repathInterval = 0.25f;
     [SerializeField] int health = 2;
 
+    ObjectPool objectPool;
     NavMeshAgent agent;
+    int currentHealth;
     float nextRepath;
 
     void Awake()
@@ -16,12 +18,30 @@ public class enemyAI : MonoBehaviour, IDamageable
         agent = GetComponent<NavMeshAgent>();
     }
 
+    void OnEnable()
+    {
+        currentHealth = health;
+    }
+
+    public void SetPool(ObjectPool pool)
+    {
+        objectPool = pool;
+    }
+
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-            Destroy(gameObject);
+            if (objectPool != null)
+            {
+                agent.ResetPath();
+                objectPool.ReturnObject(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

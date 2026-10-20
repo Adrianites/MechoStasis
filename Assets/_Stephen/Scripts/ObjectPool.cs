@@ -25,6 +25,12 @@ public class ObjectPool : MonoBehaviour
             projectile.SetPool(this);
         }
 
+        enemyAI enemy = obj.GetComponent<enemyAI>();
+        if (enemy != null)
+        {
+            enemy.SetPool(this);
+        }
+
         obj.transform.SetPositionAndRotation(position, rotation);
         obj.SetActive(true);
         return obj;
