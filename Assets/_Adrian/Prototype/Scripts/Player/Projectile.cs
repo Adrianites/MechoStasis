@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
@@ -26,17 +27,13 @@ public class Projectile : MonoBehaviour
         returnCoroutine = StartCoroutine(ReturnAfterLife());
     }
 
-    private System.Collections.IEnumerator ReturnAfterLife()
+    private IEnumerator ReturnAfterLife()
     {
         yield return new WaitForSeconds(life);
 
         if (objectPool != null)
         {
             objectPool.ReturnObject(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
 
         returnCoroutine = null;

@@ -8,14 +8,20 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject GetObject(Vector3 position, Quaternion rotation)
     {
-        GameObject obj;
-
-        if (pool.Count > 0)
+        GameObject obj = null;
+        while (pool.Count > 0 && obj == null)
         {
             obj = pool.Dequeue();
         }
-        else
+
+        if (obj == null)
         {
+            if (prefab == null)
+            {
+                Debug.LogError("ObjectPool has no prefab assigned.");
+                return null;
+            }
+
             obj = Instantiate(prefab);
         }
 
@@ -38,6 +44,11 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnObject(GameObject obj)
     {
+        if (obj == null)
+        {
+            return;
+        }
+
         obj.SetActive(false);
         pool.Enqueue(obj);
     }

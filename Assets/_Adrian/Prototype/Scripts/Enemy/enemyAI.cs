@@ -33,7 +33,7 @@ public class enemyAI : MonoBehaviour, IDamageable
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            if (objectPool != null)
+            if (objectPool != null && this.gameObject.activeInHierarchy)
             {
                 agent.ResetPath();
                 objectPool.ReturnObject(gameObject);
