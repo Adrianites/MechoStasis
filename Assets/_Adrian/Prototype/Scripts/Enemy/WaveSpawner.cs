@@ -4,11 +4,12 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     [SerializeField] GameObject enemyPrefab;
-    [SerializeField] ObjectPool enemyPool;
+    [SerializeField] GameObject enemyPool;
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] float timeBetweenWaves = 5f;
     [SerializeField] float timeBetweenSpawns = 0.5f;
     [SerializeField] int baseCount = 3;
+
 
     public int Wave { get; private set; }
 
@@ -27,7 +28,7 @@ public class WaveSpawner : MonoBehaviour
                 var point = spawnPoints[Random.Range(0, spawnPoints.Length)];
                 if (enemyPool != null)
                 {
-                    enemyPool.GetObject(point.position, point.rotation);
+                    enemyPool.GetComponent<ObjectPool>().GetObject(point.position, point.rotation, enemyPool.transform);
                 }
                 else
                 {

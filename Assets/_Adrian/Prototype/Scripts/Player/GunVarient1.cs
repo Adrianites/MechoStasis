@@ -7,7 +7,7 @@ public class GunVarient1 : MonoBehaviour, IGun
     [Header("References")]
     [SerializeField] private InputHandler playerInputHandler;
     [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private ObjectPool projectilePool;
+    [SerializeField] private GameObject projectilePool;
     [SerializeField] private Transform muzzle;
     [SerializeField] private CinemachineImpulseSource shootingImpulseSource;
 
@@ -112,7 +112,7 @@ public class GunVarient1 : MonoBehaviour, IGun
     private void SpawnProjectile(GameObject projectilePrefab, Transform spawnPoint, float projectileSpeed)
     {
         GameObject projectileInstance = projectilePool != null
-            ? projectilePool.GetObject(spawnPoint.position, spawnPoint.rotation)
+            ? projectilePool.GetComponent<ObjectPool>().GetObject(spawnPoint.position, spawnPoint.rotation, projectilePool.transform)
             : Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
 
         Projectile projectile = projectileInstance.GetComponent<Projectile>();

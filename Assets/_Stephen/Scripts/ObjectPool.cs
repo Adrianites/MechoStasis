@@ -6,7 +6,7 @@ public class ObjectPool : MonoBehaviour
     [SerializeField] private GameObject prefab;
     private Queue<GameObject> pool = new Queue<GameObject>();
 
-    public GameObject GetObject(Vector3 position, Quaternion rotation)
+    public GameObject GetObject(Vector3 position, Quaternion rotation, Transform parent)
     {
         GameObject obj = null;
         while (pool.Count > 0 && obj == null)
@@ -37,6 +37,7 @@ public class ObjectPool : MonoBehaviour
             enemy.SetPool(this);
         }
 
+        obj.transform.SetParent(parent, false);
         obj.transform.SetPositionAndRotation(position, rotation);
         obj.SetActive(true);
         return obj;

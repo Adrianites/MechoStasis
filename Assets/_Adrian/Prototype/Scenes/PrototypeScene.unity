@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveSpawner
   enemyPrefab: {fileID: 9153259590877702212, guid: c263df79ca6a1f942b1b75d48c2302eb, type: 3}
-  enemyPool: {fileID: 238181388}
+  enemyPool: {fileID: 238181387}
   spawnPoints:
   - {fileID: 1733593369}
   - {fileID: 567964916}
@@ -851,6 +851,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1045767283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1045767285}
+  - component: {fileID: 1045767284}
+  m_Layer: 0
+  m_Name: EnemyPool (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1045767284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045767283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b586133101fa8094b8009ad1095f99fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  prefab: {fileID: 8078980194009404768, guid: dd8f68436d5c0b6408cbaa6b93334d77, type: 3}
+--- !u!4 &1045767285
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045767283}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.00494, y: -3.71, z: -4.56231}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203866051
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,7 +926,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveSpawner
   enemyPrefab: {fileID: 9153259590877702212, guid: df49fb920e6fb35498e9585032218685, type: 3}
-  enemyPool: {fileID: 2134309578}
+  enemyPool: {fileID: 0}
   spawnPoints:
   - {fileID: 784717797}
   - {fileID: 239301761}
@@ -1103,9 +1148,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 630788373799110264, guid: f68d62e7a0f11254482c61e71a3261dd, type: 3}
+      propertyPath: PoolLocation
+      value: 
+      objectReference: {fileID: 1045767283}
+    - target: {fileID: 630788373799110264, guid: f68d62e7a0f11254482c61e71a3261dd, type: 3}
       propertyPath: projectilePool
       value: 
-      objectReference: {fileID: 2134309578}
+      objectReference: {fileID: 1045767283}
     - target: {fileID: 2352554251183805733, guid: f68d62e7a0f11254482c61e71a3261dd, type: 3}
       propertyPath: m_Name
       value: MechPlayer
@@ -1335,17 +1384,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ffaaa29099ff83408f8774668d4d533, type: 3}
---- !u!114 &2134309578 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5230499982550139437, guid: 1ffaaa29099ff83408f8774668d4d533, type: 3}
-  m_PrefabInstance: {fileID: 2093149099}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b586133101fa8094b8009ad1095f99fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
 --- !u!1001 &2132001175543010580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1415,6 +1453,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 2093149099}
   - {fileID: 238181389}
+  - {fileID: 1045767285}
   - {fileID: 1345580876}
   - {fileID: 1824517185}
   - {fileID: 2132001175543010580}
