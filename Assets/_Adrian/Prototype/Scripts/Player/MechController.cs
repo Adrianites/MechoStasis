@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MechController : MonoBehaviour, IDamageable
 {
@@ -38,6 +39,7 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private bool isDead = false;
     [SerializeField] public bool isInvincible = false;
     [SerializeField] private Slider healthSlider;
+    [SerializeField] private GameObject hitEffect;
 
     [Header("References")]
     [SerializeField] private CharacterController characterController;
@@ -82,6 +84,11 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void Start()
     {   
+        if (hitEffect != null)
+        {
+            hitEffect.SetActive(false);
+        }
+        
         if (healthSlider != null)
         {
             healthSlider.maxValue = health;
@@ -131,6 +138,7 @@ public class MechController : MonoBehaviour, IDamageable
             return;
 
         health -= damage;
+        StartCoroutine(IHitEffect());
 
         if (healthSlider != null)
         {
@@ -145,6 +153,13 @@ public class MechController : MonoBehaviour, IDamageable
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+
+    private IEnumerator IHitEffect()
+    {
+        hitEffect.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        hitEffect.SetActive(false);
     }
 
     private void Update()
