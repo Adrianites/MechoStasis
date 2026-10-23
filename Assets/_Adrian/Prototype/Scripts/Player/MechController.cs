@@ -9,17 +9,24 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float airControlMultiplier = 0.5f;
     [SerializeField] private float sprintMultiplier = 1.5f;
+    [SerializeField] private Vector3 currentMovement;
 
     [Header("Dash")]
     [SerializeField] private float dashSpeed = 10f;
     [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private float dashCooldown = 0.75f;
+    [SerializeField] private bool dashRequested;
+    [SerializeField] private float dashTimer;
+    [SerializeField] private float dashCooldownTimer;
+    [SerializeField] private Vector3 dashDirection;
     [SerializeField] private Slider dashCooldownSlider;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float gravityMultiplier = 1f;
     [SerializeField] private float coyoteTime = 0.1f;
+    [SerializeField] private float coyoteTimeCounter;
+    [SerializeField] private bool jumpRequested;
 
     [Header("Camera")]
     [SerializeField] private float mouseSensitivity = 20f;
@@ -41,6 +48,12 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private Slider healthSlider;
     [SerializeField] private GameObject hitEffect;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource FootstepAudioSource;
+    [SerializeField] private AudioSource DashAudioSource;
+    [SerializeField] private AudioSource JumpAudioSource;
+    [SerializeField] private AudioSource HitAudioSource;
+
     [Header("References")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private CinemachineCamera mainCam;
@@ -49,8 +62,7 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private InputHandler playerInputHandler;
     [SerializeField] private GameObject deathCanvas;
     [SerializeField] private GameObject healthCanvas;
-    [SerializeField] private Animator anim;
-
+    [SerializeField] private Animator[] animators;
 
     private CinemachineImpulseListener cockpitImpulseListener;
     private Quaternion mainCamRestRotation;
@@ -61,14 +73,6 @@ public class MechController : MonoBehaviour, IDamageable
     private float cockpitCameraYaw;
     private Vector3 cockpitCameraPositionOffset;
     private Vector3 cockpitCameraRotationOffset;
-
-    private Vector3 currentMovement;
-    private float coyoteTimeCounter;
-    private bool jumpRequested;
-    private bool dashRequested;
-    private float dashTimer;
-    private float dashCooldownTimer;
-    private Vector3 dashDirection;
 
     private Vector3 previousHorizontalVelocity;
     private float movementImpulseTimer;
@@ -140,6 +144,7 @@ public class MechController : MonoBehaviour, IDamageable
 
         health -= damage;
         StartCoroutine(IHitEffect());
+        HitAudioSource?.Play();
 
         if (healthSlider != null)
         {
@@ -184,7 +189,8 @@ public class MechController : MonoBehaviour, IDamageable
         }
 
         bool groundedBeforeMove = characterController.isGrounded;
-        anim.SetBool(AnimStrings.IsWalking, groundedBeforeMove);
+        animators[0].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // right hand animator
+        animators[1].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // left hand animator
 
         Vector2 input = playerInputHandler.MovementInput;
         bool sprinting = playerInputHandler.SprintTriggered;
@@ -249,7 +255,9 @@ public class MechController : MonoBehaviour, IDamageable
 
         if (jumpRequested && coyoteTimeCounter > 0f)
         {
-            anim.SetTrigger(AnimStrings.Jump);
+            animators[0].SetTrigger(AnimStrings.Jump); // right hand animator
+            animators[1].SetTrigger(AnimStrings.Jump); // left hand animator
+            JumpAudioSource?.Play();
             currentMovement.y = jumpForce;
             coyoteTimeCounter = 0f;
             jumpRequested = false;
