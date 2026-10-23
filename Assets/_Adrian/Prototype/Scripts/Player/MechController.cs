@@ -49,6 +49,7 @@ public class MechController : MonoBehaviour, IDamageable
     [SerializeField] private InputHandler playerInputHandler;
     [SerializeField] private GameObject deathCanvas;
     [SerializeField] private GameObject healthCanvas;
+    [SerializeField] private Animator anim;
 
 
     private CinemachineImpulseListener cockpitImpulseListener;
@@ -183,6 +184,7 @@ public class MechController : MonoBehaviour, IDamageable
         }
 
         bool groundedBeforeMove = characterController.isGrounded;
+        anim.SetBool(AnimStrings.IsWalking, groundedBeforeMove);
 
         Vector2 input = playerInputHandler.MovementInput;
         bool sprinting = playerInputHandler.SprintTriggered;
@@ -247,6 +249,7 @@ public class MechController : MonoBehaviour, IDamageable
 
         if (jumpRequested && coyoteTimeCounter > 0f)
         {
+            anim.SetTrigger(AnimStrings.Jump);
             currentMovement.y = jumpForce;
             coyoteTimeCounter = 0f;
             jumpRequested = false;
@@ -392,4 +395,5 @@ public class MechController : MonoBehaviour, IDamageable
     {
         dashRequested = true;
     }
+
 }
