@@ -204,15 +204,19 @@ public class MechController : MonoBehaviour, IDamageable
         Vector3 horizontalVelocity;
         float effectiveMoveSpeed = moveSpeed * (sprinting ? sprintMultiplier : 1f);
 
-        if (dashRequested && dashCooldownTimer >= dashCooldown)
+        if (dashRequested)
         {
             dashRequested = false;
-            dashTimer = dashDuration;
-            dashCooldownTimer = 0f;
 
-            dashDirection = worldDirection.sqrMagnitude > 0.001f
-                ? worldDirection.normalized
-                : transform.forward;
+            if (dashCooldownTimer >= dashCooldown)
+            {
+                dashTimer = dashDuration;
+                dashCooldownTimer = 0f;
+
+                dashDirection = worldDirection.sqrMagnitude > 0.001f
+                    ? worldDirection.normalized
+                    : transform.forward;
+            }
         }
 
         if (dashTimer > 0f)
