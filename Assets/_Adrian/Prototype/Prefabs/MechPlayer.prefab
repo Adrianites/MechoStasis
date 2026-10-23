@@ -9293,7 +9293,7 @@ Transform:
   m_GameObject: {fileID: 2505674121515363536}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069854, y: -0.013098379, z: 0.013098375, w: 0.7069856}
-  m_LocalPosition: {x: 0.741, y: -0.37899995, z: 0.735}
+  m_LocalPosition: {x: 1.145, y: -0.37899995, z: 0.735}
   m_LocalScale: {x: 0.26487043, y: 0.26487038, z: 0.26487038}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13229,7 +13229,7 @@ Transform:
   m_GameObject: {fileID: 3491589265339697117}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069854, y: -0.013098379, z: 0.013098375, w: 0.7069856}
-  m_LocalPosition: {x: -0.7902477, y: -0.37899983, z: 0.67824167}
+  m_LocalPosition: {x: -1.09, y: -0.37899983, z: 0.667}
   m_LocalScale: {x: -0.26487043, y: 0.26487038, z: 0.26487038}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13320,7 +13320,7 @@ Animator:
   m_GameObject: {fileID: 3491589265339697117}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 43f9509efd5fb2b418f9bc67cb1a17ae, type: 2}
+  m_Controller: {fileID: 9100000, guid: bbe3e64a532682e409bd9d17fed848d5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -18429,7 +18429,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 70
   orthographic: 0
   orthographic size: 10
   m_Depth: 0
@@ -18784,8 +18784,8 @@ Transform:
   m_GameObject: {fileID: 4849477463955566215}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.027, y: 0.386, z: -0.44}
+  m_LocalScale: {x: 0.47851, y: 0.47851, z: 0.47851}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4269216031929769319}
@@ -20867,7 +20867,7 @@ Transform:
   m_GameObject: {fileID: 5476004776381717354}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.53, z: 1.098}
+  m_LocalPosition: {x: 0.062, y: 1.412, z: 1.726}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31225,7 +31225,7 @@ Transform:
   m_GameObject: {fileID: 8308008824252946566}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 9.3132246e-10, w: 1}
-  m_LocalPosition: {x: 0.7209994, y: -0.788, z: 2.7059999}
+  m_LocalPosition: {x: 1.1249994, y: -0.788, z: 2.7059991}
   m_LocalScale: {x: 0.56395006, y: 0.56395, z: 0.56395006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33270,7 +33270,12 @@ MonoBehaviour:
   jumpRequested: 0
   mouseSensitivity: 20
   upDownLookRange: 80
+  cockpitYawRange: 60
+  cockpitPitchRange: 60
   cameraReturnSpeed: 8
+  armsRoot: {fileID: 8403104123755731630}
+  armsFollowSpeed: 12
+  armsFollowWeight: 1
   cockpitPositionSway: 0.02
   cockpitRotationSway: 0.8
   cockpitBobAmount: 0.1

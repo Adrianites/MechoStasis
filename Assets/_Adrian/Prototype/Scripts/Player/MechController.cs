@@ -31,7 +31,14 @@ public class MechController : MonoBehaviour, IDamageable
     [Header("Camera")]
     [SerializeField] private float mouseSensitivity = 20f;
     [SerializeField] private float upDownLookRange = 80f;
+    [SerializeField] private float cockpitYawRange = 60f;
+    [SerializeField] private float cockpitPitchRange = 60f;
     [SerializeField] private float cameraReturnSpeed = 8f;
+
+    [Header("Arms")]
+    [SerializeField] private Transform armsRoot;
+    [SerializeField] private float armsFollowSpeed = 12f;
+    [SerializeField, Range(0f, 1f)] private float armsFollowWeight = 1f;
 
     [Header("Cockpit Motion")]
     [SerializeField] private float cockpitPositionSway = 0.02f;
@@ -66,6 +73,7 @@ public class MechController : MonoBehaviour, IDamageable
 
     private CinemachineImpulseListener cockpitImpulseListener;
     private Quaternion mainCamRestRotation;
+    private Quaternion armsRestRotation;
     private Quaternion cockpitCamRestRotation;
     private Vector3 cockpitCamRestPosition;
     private float mainCameraPitch;
@@ -122,6 +130,9 @@ public class MechController : MonoBehaviour, IDamageable
             mainCamRestRotation = mainCam.transform.localRotation;
             mainCameraPitch = NormalizePitch(mainCamRestRotation.eulerAngles.x);
         }
+
+        if (armsRoot != null)
+            armsRestRotation = armsRoot.localRotation;
 
         if (cockpitCam != null)
         {
@@ -296,9 +307,10 @@ public class MechController : MonoBehaviour, IDamageable
 
         if (CockpitRotate)
         {
-            cockpitCameraYaw += mouseX;
+            cockpitCameraYaw = Mathf.Clamp
+            (cockpitCameraYaw + mouseX, -cockpitYawRange, cockpitYawRange);
             cockpitCameraPitch = Mathf.Clamp
-            (cockpitCameraPitch - mouseY, -upDownLookRange, upDownLookRange);
+            (cockpitCameraPitch - mouseY, -cockpitPitchRange, cockpitPitchRange);
 
             if (mainCam != null)
             {
@@ -339,6 +351,29 @@ public class MechController : MonoBehaviour, IDamageable
             cockpitCam.transform.localRotation = cockpitLookRotation * cockpitSwayRotation;
             cockpitCam.transform.localPosition = cockpitCamRestPosition + cockpitCameraPositionOffset;
         }
+
+        UpdateArmsRotation();
+    }
+
+    private void UpdateArmsRotation()
+    {
+        if (armsRoot == null || mainCam == null)
+        {
+            return;
+        }
+
+        Quaternion cameraLookOffset = mainCam.transform.localRotation * Quaternion.Inverse(mainCamRestRotation);
+
+        if (armsFollowWeight < 1f)
+        {
+            cameraLookOffset = Quaternion.Slerp(Quaternion.identity, cameraLookOffset, armsFollowWeight);
+        }
+
+        Quaternion targetRotation = cameraLookOffset * armsRestRotation;
+
+        armsRoot.localRotation = armsFollowSpeed > 0f
+            ? Quaternion.Slerp(armsRoot.localRotation, targetRotation, armsFollowSpeed * Time.deltaTime)
+            : targetRotation;
     }
 
     private void UpdateCockpitMotion()
