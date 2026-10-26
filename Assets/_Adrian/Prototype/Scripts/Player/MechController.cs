@@ -192,6 +192,9 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void HandleMovement()
     {
+        //animators[0].SetBool(AnimStrings.IsWalking, false);
+        //animators[1].SetBool(AnimStrings.IsWalking, false);
+        
         dashCooldownTimer = Mathf.Min(dashCooldown, dashCooldownTimer + Time.deltaTime);
 
         if (dashCooldownSlider != null)
@@ -200,8 +203,9 @@ public class MechController : MonoBehaviour, IDamageable
         }
 
         bool groundedBeforeMove = characterController.isGrounded;
-        animators[0].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // right hand animator
-        animators[1].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // left hand animator
+        //have to change this because its messing up the idle animation
+        //animators[0].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // right hand animator
+        //animators[1].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // left hand animator
 
         Vector2 input = playerInputHandler.MovementInput;
         bool sprinting = playerInputHandler.SprintTriggered;
@@ -284,6 +288,9 @@ public class MechController : MonoBehaviour, IDamageable
         float fallingSpeed = Mathf.Max(0f, -currentMovement.y);
 
         characterController.Move(currentMovement * Time.deltaTime);
+        //better place to put the anim strings but still has a massive delay
+        animators[0].SetBool(AnimStrings.IsWalking, currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove); // right hand animator
+        animators[1].SetBool(AnimStrings.IsWalking, currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove); // left hand animator
 
         bool groundedAfterMove = characterController.isGrounded;
 
