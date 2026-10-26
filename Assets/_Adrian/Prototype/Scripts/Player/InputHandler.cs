@@ -65,6 +65,7 @@ public class InputHandler : MonoBehaviour
     public event System.Action OnPausePerformed;
     public event System.Action OnDashPerformed;
     public event System.Action OnMeleeAttackPerformed;
+    public event System.Action OnMeleeAttackCanceled;
     public event System.Action OnInventoryTogglePerformed;
     public event System.Action OnGrapplePerformed;
 
@@ -126,7 +127,7 @@ public class InputHandler : MonoBehaviour
         dashAction.canceled += inputInfo => DashTriggered = false;
 
         meleeAttackAction.performed += inputInfo => { MeleeAttackTriggered = true; OnMeleeAttackPerformed?.Invoke(); };
-        meleeAttackAction.canceled += inputInfo => MeleeAttackTriggered = false;
+        meleeAttackAction.canceled += inputInfo => { MeleeAttackTriggered = false; OnMeleeAttackCanceled?.Invoke(); };
 
         inventoryToggleAction.performed += inputInfo => { InventoryToggleTriggered = true; OnInventoryTogglePerformed?.Invoke(); };
         inventoryToggleAction.canceled += inputInfo => InventoryToggleTriggered = false;

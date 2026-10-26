@@ -612,6 +612,17 @@
                 },
                 {
                     "name": "",
+                    "id": "4aa51a10-62fc-46f2-8d01-1c6e7592b4ac",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MeleeAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "4774bf7d-d958-4492-adea-93e3735ca706",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
