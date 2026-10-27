@@ -1174,7 +1174,7 @@ AudioSource:
   m_GameObject: {fileID: 324454429249755818}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8068998835371417003, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -2500,7 +2500,7 @@ Transform:
   m_GameObject: {fileID: 521320933072969284}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: 0.33669996, y: -0.043220162, z: 0.07304001}
+  m_LocalPosition: {x: 0.33669996, y: -0.043220043, z: 0.07304001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2539,7 +2539,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 70
   orthographic: 0
   orthographic size: 10
   m_Depth: 20
@@ -21862,7 +21862,7 @@ Transform:
   m_GameObject: {fileID: 5592945727808711184}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.55999994, z: 0}
+  m_LocalPosition: {x: 0, y: 0.56000006, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33474,8 +33474,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695225305888238161}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: 0.24424028, y: 11.937, z: 14.0415}
+  m_LocalRotation: {x: -0.1702838, y: 0.8296749, z: -0.37140554, w: -0.38039577}
+  m_LocalPosition: {x: -32.01577, y: 32.943993, z: 52.025414}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33878,6 +33878,13 @@ MonoBehaviour:
   healthSlider: {fileID: 496972568871206065}
   hitEffect: {fileID: 7909301594088549498}
   FootstepAudioSource: {fileID: 6128697508108762984}
+  footstepClips:
+  - {fileID: 8300000, guid: e05f121a07573044384b88faca7fd8d8, type: 3}
+  - {fileID: 8300000, guid: d38120bc534542741a9dae79eb6b1faf, type: 3}
+  - {fileID: 8300000, guid: 2a5494cd1cfd3664da31954b19a486c3, type: 3}
+  - {fileID: 8300000, guid: afb7220feed695444ba5186e27f5bd63, type: 3}
+  footstepInterval: 0.6
+  footstepPitchRange: {x: 0.9, y: 1.1}
   DashAudioSource: {fileID: 160283673361576271}
   JumpAudioSource: {fileID: 2210329263593748440}
   HitAudioSource: {fileID: 5621454098531911044}

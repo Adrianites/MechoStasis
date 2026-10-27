@@ -57,6 +57,9 @@ public class MechController : MonoBehaviour, IDamageable
 
     [Header("Audio")]
     [SerializeField] private AudioSource FootstepAudioSource;
+    [SerializeField] private AudioClip[] footstepClips;
+    [SerializeField] private float footstepInterval = 0.6f;
+    [SerializeField] private Vector2 footstepPitchRange = new Vector2(0.9f, 1.1f);
     [SerializeField] private AudioSource DashAudioSource;
     [SerializeField] private AudioSource JumpAudioSource;
     [SerializeField] private AudioSource HitAudioSource;
@@ -86,6 +89,7 @@ public class MechController : MonoBehaviour, IDamageable
     private float movementImpulseTimer;
     private float previousVerticalVelocity;
     private bool wasGrounded;
+    private float footstepTimer;
 
     private void Awake()
     {
@@ -293,11 +297,45 @@ public class MechController : MonoBehaviour, IDamageable
         animators[0].SetBool(AnimStrings.IsWalking, currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove); // right hand animator
         animators[1].SetBool(AnimStrings.IsWalking, currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove); // left hand animator
 
+        bool isWalking = currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove && dashTimer <= 0f;
+        UpdateFootsteps(isWalking, currentHorizontalVelocity.magnitude);
+
         bool groundedAfterMove = characterController.isGrounded;
 
         previousVerticalVelocity = currentMovement.y;
         wasGrounded = groundedAfterMove;
         previousHorizontalVelocity = currentHorizontalVelocity;
+    }
+
+    private void UpdateFootsteps(bool isWalking, float horizontalSpeed)
+    {
+        if (FootstepAudioSource == null)
+            return;
+
+        if (!isWalking)
+        {
+            footstepTimer = Mathf.Max(0f, footstepTimer - Time.deltaTime);
+            return;
+        }
+
+        float speedPercent = Mathf.Max(0.5f, horizontalSpeed / Mathf.Max(0.01f, moveSpeed));
+        footstepTimer -= Time.deltaTime * speedPercent;
+
+        if (footstepTimer <= 0f)
+        {
+            footstepTimer = footstepInterval;
+            PlayFootstep();
+        }
+    }
+
+    private void PlayFootstep()
+    {
+        FootstepAudioSource.pitch = Random.Range(footstepPitchRange.x, footstepPitchRange.y);
+
+        if (footstepClips != null && footstepClips.Length > 0)
+            FootstepAudioSource.PlayOneShot(footstepClips[Random.Range(0, footstepClips.Length)]);
+        else
+            FootstepAudioSource.Play();
     }
 
 

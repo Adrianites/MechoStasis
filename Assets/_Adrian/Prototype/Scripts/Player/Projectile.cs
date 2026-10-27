@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] int damage = 10;
     [SerializeField] float life = 4f;
+    [SerializeField] AudioSource shootSound;
 
     private ObjectPool objectPool;
     private Coroutine returnCoroutine;
@@ -18,6 +19,10 @@ public class Projectile : MonoBehaviour
     public void Launch(Vector3 velocity)
     {
         GetComponent<Rigidbody>().linearVelocity = velocity;
+        if (shootSound != null)
+        {
+            shootSound.Play();
+        }
 
         if (returnCoroutine != null)
         {
