@@ -71,7 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   target: {fileID: 0}
   repathInterval: 0.25
-  health: 2
+  health: 4
 --- !u!195 &3336583728862694716
 NavMeshAgent:
   m_ObjectHideFlags: 0

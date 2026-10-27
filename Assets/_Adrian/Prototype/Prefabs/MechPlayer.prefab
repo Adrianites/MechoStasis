@@ -20870,13 +20870,14 @@ GameObject:
   - component: {fileID: 6294353587136965101}
   - component: {fileID: 2984096160530826924}
   - component: {fileID: 5735595196432509742}
+  - component: {fileID: 5399919158505499897}
   m_Layer: 0
   m_Name: FistCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8248894214425818256
 Transform:
   m_ObjectHideFlags: 0
@@ -20907,7 +20908,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5291681480014592521}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -20970,6 +20971,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5399919158505499897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291681480014592521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d48bb6d861c62bb4298d725015db6188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FistCollider
+  damage: 20
 --- !u!1 &5293013968736853236
 GameObject:
   m_ObjectHideFlags: 0
@@ -21861,8 +21875,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5592945727808711184}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.56000006, z: 0}
+  m_LocalRotation: {x: 0, y: -0.018523902, z: 0, w: 0.99982846}
+  m_LocalPosition: {x: -0.43074477, y: -14.5783, z: -18.224209}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33474,8 +33488,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695225305888238161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1702838, y: 0.8296749, z: -0.37140554, w: -0.38039577}
-  m_LocalPosition: {x: -32.01577, y: 32.943993, z: 52.025414}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.86125994, y: -3.2012997, z: -4.154248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34004,10 +34018,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FistWeapon
   playerInputHandler: {fileID: 713680245035823030}
   animators:
-  - {fileID: 5932867641597272830}
   - {fileID: 5000159176541982954}
+  - {fileID: 5932867641597272830}
   fistCollider: {fileID: 5291681480014592521}
-  damage: 20
   speed: 25
 --- !u!1 &8757659373869840540
 GameObject:

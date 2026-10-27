@@ -5,7 +5,7 @@ public class FistWeapon : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private InputHandler playerInputHandler;
-    [SerializeField] private Animator[] animators;
+    [SerializeField] private Animator animator;
     [SerializeField] private GameObject fistCollider;
 
     [Header("Settings")]
@@ -85,8 +85,9 @@ public class FistWeapon : MonoBehaviour
         if (attackHeld)
         {
             Debug.Log("Melee attack performed!");
-            animators[0].SetTrigger(AnimStrings.Punch); 
-            animators[1].SetTrigger(AnimStrings.Punch); 
+            /*animators[0].SetTrigger(AnimStrings.Punch); 
+            animators[1].SetTrigger(AnimStrings.Punch); */
+            animator.SetTrigger(AnimStrings.Punch);
             if (fistCollider != null)
             {
                 fistCollider.SetActive(true);
@@ -110,19 +111,5 @@ public class FistWeapon : MonoBehaviour
             yield return new WaitForSeconds(1f / speed);
         }
     }
-
-    /* void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            other.GetComponent<enemyAI>().TakeDamage(damage);
-        }
-
-        if (other.CompareTag("Explosive"))
-        {
-            other.GetComponent<Explosive>().TakeDamage(damage);
-        }
-    } */
-
 
 }
