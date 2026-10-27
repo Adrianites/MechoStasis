@@ -225,6 +225,7 @@ public class MechController : MonoBehaviour, IDamageable
 
             if (dashCooldownTimer >= dashCooldown)
             {
+                DashAudioSource?.Play();
                 dashTimer = dashDuration;
                 dashCooldownTimer = 0f;
 
