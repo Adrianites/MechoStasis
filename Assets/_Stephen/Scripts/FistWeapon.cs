@@ -5,12 +5,12 @@ public class FistWeapon : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private InputHandler playerInputHandler;
+    [SerializeField] private Animator[] animators;
     [SerializeField] private GameObject fistCollider;
 
     [Header("Settings")]
-    [SerializeField] private int damage = 20;
     [SerializeField] private float speed = 25f;
-
+    
     private bool attackHeld;
 
     private void Awake()
@@ -18,6 +18,11 @@ public class FistWeapon : MonoBehaviour
         if (playerInputHandler == null)
         {
             playerInputHandler = GetComponentInParent<InputHandler>();
+        }
+
+        if (fistCollider != null)
+        {
+            fistCollider.SetActive(false);
         }
     }
 
@@ -34,6 +39,13 @@ public class FistWeapon : MonoBehaviour
 
     private void OnDisable()
     {
+        attackHeld = false;
+
+        if (fistCollider != null)
+        {
+            fistCollider.SetActive(false);
+        }
+
         if (playerInputHandler == null)
         {
             return;
@@ -61,6 +73,10 @@ public class FistWeapon : MonoBehaviour
     private void OnMeleeAttackCanceled()
     {
         attackHeld = false;
+        if (fistCollider != null)
+        {
+            fistCollider.SetActive(false);
+        }
         Debug.Log("Melee attack canceled!");
     }
 
@@ -69,12 +85,20 @@ public class FistWeapon : MonoBehaviour
         if (attackHeld)
         {
             Debug.Log("Melee attack performed!");
-            fistCollider.SetActive(true);
+            animators[0].SetTrigger(AnimStrings.Punch); 
+            animators[1].SetTrigger(AnimStrings.Punch); 
+            if (fistCollider != null)
+            {
+                fistCollider.SetActive(true);
+            }
         }
         else
         {
             Debug.Log("Melee attack canceled!");
-            fistCollider.SetActive(false);
+            if (fistCollider != null)
+            {
+                fistCollider.SetActive(false);
+            }
         }
     }
 
@@ -87,7 +111,7 @@ public class FistWeapon : MonoBehaviour
         }
     }
 
-     void OnTriggerEnter(Collider other)
+    /* void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
@@ -98,7 +122,7 @@ public class FistWeapon : MonoBehaviour
         {
             other.GetComponent<Explosive>().TakeDamage(damage);
         }
-    }
+    } */
 
 
 }
