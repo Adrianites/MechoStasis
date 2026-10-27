@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   damage: 1
   life: 4
+  hasHit: 0
   shootSound: {fileID: 7270661371327739718}
 --- !u!82 &7270661371327739718
 AudioSource:

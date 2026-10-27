@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] int damage = 10;
     [SerializeField] float life = 4f;
+    public bool hasHit = false;
     [SerializeField] AudioSource shootSound;
 
     private ObjectPool objectPool;
@@ -38,6 +39,7 @@ public class Projectile : MonoBehaviour
 
         if (objectPool != null)
         {
+            hasHit = false;
             objectPool.ReturnObject(gameObject);
         }
 
@@ -46,6 +48,10 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (hasHit)
+            return;
+        
+        hasHit = true;
         if (other.CompareTag("Enemy"))
         {
             other.GetComponent<enemyAI>().TakeDamage(damage);
