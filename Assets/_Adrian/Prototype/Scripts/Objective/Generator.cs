@@ -6,6 +6,7 @@ public class Generator : MonoBehaviour
     public InputHandler playerInputHandler;
     public Renderer buttonRenderer;
     public Light generatorLight;
+    public AudioSource generatorAudioSource;
 
     private void Start()
     {
@@ -42,6 +43,7 @@ public class Generator : MonoBehaviour
         buttonRenderer.material.color = Color.green;
         generatorLight.color = Color.green;
         activated = true;
+        generatorAudioSource.Play();
         
         GameManager.Instance.IncrementObjectivesDone();
     }
