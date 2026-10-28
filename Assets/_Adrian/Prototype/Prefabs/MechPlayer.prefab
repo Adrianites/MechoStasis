@@ -2229,8 +2229,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521320933072969284}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: 0.33669996, y: -0.043220162, z: 0.07304001}
+  m_LocalRotation: {x: -0.24730745, y: 0.73810786, z: -0.35055777, w: -0.52071595}
+  m_LocalPosition: {x: -50.497997, y: 19.424551, z: -14.689848}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2269,7 +2269,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 70
   orthographic: 0
   orthographic size: 10
   m_Depth: 20
@@ -17758,7 +17758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48bb6d861c62bb4298d725015db6188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FistCollider
-  damage: 2
+  damage: 10
   punchSound: {fileID: 1826622707082318129}
 --- !u!54 &5119912779032463623
 Rigidbody:
@@ -17798,9 +17798,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 8068998835371417003, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: bc03753476581e546821950d9d465519, type: 3}
+  m_Resource: {fileID: 8300000, guid: 52ee95115a9d7d041a04c2ea4d0a3efe, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.691
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -18505,8 +18505,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5592945727808711184}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.55999994, z: 0}
+  m_LocalRotation: {x: -0.2407713, y: 0.7476269, z: -0.3550787, w: -0.50695395}
+  m_LocalPosition: {x: -50.252975, y: 20.027771, z: -16.635746}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27285,8 +27285,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695225305888238161}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: 0.24424028, y: 11.937, z: 14.0415}
+  m_LocalRotation: {x: -0.24730745, y: 0.73810786, z: -0.35055777, w: -0.52071595}
+  m_LocalPosition: {x: -50.590458, y: 31.404772, z: -0.72138786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27580,7 +27580,7 @@ MonoBehaviour:
   coyoteTime: 0.1
   coyoteTimeCounter: 0
   jumpRequested: 0
-  mouseSensitivity: 20
+  mouseSensitivity: 140
   upDownLookRange: 80
   cockpitYawRange: 60
   cockpitPitchRange: 60
