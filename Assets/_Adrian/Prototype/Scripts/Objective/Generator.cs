@@ -15,7 +15,7 @@ public class Generator : MonoBehaviour
             playerInputHandler = FindObjectsByType<InputHandler>(FindObjectsSortMode.None)[0];
         }
         
-        buttonRenderer.material.color = Color.red;
+        buttonRenderer.material.SetColor("_BaseColor", Color.red);
         generatorLight.color = Color.red;
     }
 
@@ -40,7 +40,7 @@ public class Generator : MonoBehaviour
         {
             return;
         }
-        buttonRenderer.material.color = Color.green;
+        buttonRenderer.material.SetColor("_BaseColor", Color.green);
         generatorLight.color = Color.green;
         activated = true;
         generatorAudioSource.Play();
