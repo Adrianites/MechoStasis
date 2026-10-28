@@ -55,6 +55,7 @@ namespace HeatmapTool
             public List<string> ignoredSessions = new List<string>();
             public List<SessionEntry> sessions = new List<SessionEntry>();
             public bool saveMapWithCsv = true;
+            public bool saveHeightmap = true;
             public int mapResolution = 2048;
             public float mapHideAbove = 3f;
             public float mapPadding = 5f;
@@ -887,6 +888,10 @@ namespace HeatmapTool
                     "Exporting a .csv also saves a top-down picture of this level beside it (name_map.png), plus " +
                     "name_map_bounds.csv with the world X/Z area the picture covers, so you can plot the CSV on top of it."),
                     settings.saveMapWithCsv);
+                settings.saveHeightmap = EditorGUILayout.Toggle(new GUIContent("Save Heightmap",
+                    "Every map also gets name_map_height.png: a 16-bit grayscale heightmap with the same size and framing, " +
+                    "for displacing the map into 3D. Black is min_y and white is max_y from the bounds CSV."),
+                    settings.saveHeightmap);
                 settings.mapResolution = EditorGUILayout.IntPopup(new GUIContent("Resolution",
                     "Pixels along the longer side of the picture."), settings.mapResolution, MapResolutionLabels, MapResolutions);
                 settings.mapHideAbove = EditorGUILayout.Slider(new GUIContent("Hide Above (m)",
@@ -1134,7 +1139,7 @@ namespace HeatmapTool
             if (hideView) view.SetLayersVisible(false, false, false);
             try
             {
-                HeatmapMapCapture.Save(path, area, floorTop + settings.mapHideAbove, settings.mapResolution);
+                HeatmapMapCapture.Save(path, area, floorTop + settings.mapHideAbove, settings.mapResolution, settings.saveHeightmap);
             }
             finally
             {

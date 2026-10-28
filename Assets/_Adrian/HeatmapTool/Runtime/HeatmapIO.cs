@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using UnityEngine;
 
@@ -294,9 +295,104 @@ namespace HeatmapTool
             EnsureFolderFor(path);
             CultureInfo ci = CultureInfo.InvariantCulture;
             using var writer = new StreamWriter(path, false, Utf8);
-            writer.WriteLine("image,scene,width,height,pixels_per_metre,min_x,max_x,min_z,max_z");
-            writer.WriteLine(string.Format(ci, "{0},{1},{2},{3},{4:0.######},{5:0.###},{6:0.###},{7:0.###},{8:0.###}",
-                Csv(map.image), Csv(map.scene), map.width, map.height, map.pixelsPerMetre, map.minX, map.maxX, map.minZ, map.maxZ));
+            writer.WriteLine("image,scene,width,height,pixels_per_metre,min_x,max_x,min_z,max_z,height_image,min_y,max_y");
+            string heights = string.IsNullOrEmpty(map.heightImage)
+                ? ",,"
+                : string.Format(ci, "{0},{1:0.####},{2:0.####}", Csv(map.heightImage), map.minY, map.maxY);
+            writer.WriteLine(string.Format(ci, "{0},{1},{2},{3},{4:0.######},{5:0.###},{6:0.###},{7:0.###},{8:0.###},{9}",
+                Csv(map.image), Csv(map.scene), map.width, map.height, map.pixelsPerMetre, map.minX, map.maxX, map.minZ, map.maxZ,
+                heights));
+        }
+
+        public static byte[] EncodeGray16Png(ushort[] pixels, int width, int height)
+        {
+            if (width <= 0 || height <= 0 || pixels.Length != width * height)
+                throw new ArgumentException("The pixel count doesn't match the image size.");
+
+            int stride = width * 2 + 1;
+            var filtered = new byte[stride * height];
+            for (int y = 0; y < height; y++)
+            {
+                int row = y * stride;
+                filtered[row] = 1;
+                int previous = 0;
+                for (int x = 0; x < width; x++)
+                {
+                    int value = pixels[y * width + x];
+                    filtered[row + 1 + x * 2] = (byte)((value >> 8) - (previous >> 8));
+                    filtered[row + 2 + x * 2] = (byte)(value - previous);
+                    previous = value;
+                }
+            }
+
+            var header = new byte[13];
+            WriteBigEndian(header, 0, (uint)width);
+            WriteBigEndian(header, 4, (uint)height);
+            header[8] = 16;
+
+            using var png = new MemoryStream();
+            png.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }, 0, 8);
+            WritePngChunk(png, "IHDR", header);
+            WritePngChunk(png, "IDAT", Zlib(filtered));
+            WritePngChunk(png, "IEND", Array.Empty<byte>());
+            return png.ToArray();
+        }
+
+        static byte[] Zlib(byte[] data)
+        {
+            using var output = new MemoryStream();
+            output.WriteByte(0x78);
+            output.WriteByte(0x9C);
+            using (var deflate = new DeflateStream(output, System.IO.Compression.CompressionLevel.Optimal, true)) deflate.Write(data, 0, data.Length);
+
+            uint a = 1, b = 0;
+            foreach (byte value in data)
+            {
+                a = (a + value) % 65521;
+                b = (b + a) % 65521;
+            }
+            var adler = new byte[4];
+            WriteBigEndian(adler, 0, (b << 16) | a);
+            output.Write(adler, 0, 4);
+            return output.ToArray();
+        }
+
+        static void WritePngChunk(Stream stream, string type, byte[] data)
+        {
+            var bytes = new byte[12 + data.Length];
+            WriteBigEndian(bytes, 0, (uint)data.Length);
+            Encoding.ASCII.GetBytes(type, 0, 4, bytes, 4);
+            Buffer.BlockCopy(data, 0, bytes, 8, data.Length);
+            WriteBigEndian(bytes, 8 + data.Length, Crc32(bytes, 4, 4 + data.Length));
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        static uint[] crcTable;
+
+        static uint Crc32(byte[] data, int start, int count)
+        {
+            if (crcTable == null)
+            {
+                crcTable = new uint[256];
+                for (uint n = 0; n < 256; n++)
+                {
+                    uint c = n;
+                    for (int k = 0; k < 8; k++) c = (c & 1) != 0 ? 0xEDB88320u ^ (c >> 1) : c >> 1;
+                    crcTable[n] = c;
+                }
+            }
+
+            uint crc = 0xFFFFFFFFu;
+            for (int i = start; i < start + count; i++) crc = crcTable[(crc ^ data[i]) & 0xFF] ^ (crc >> 8);
+            return crc ^ 0xFFFFFFFFu;
+        }
+
+        static void WriteBigEndian(byte[] buffer, int offset, uint value)
+        {
+            buffer[offset] = (byte)(value >> 24);
+            buffer[offset + 1] = (byte)(value >> 16);
+            buffer[offset + 2] = (byte)(value >> 8);
+            buffer[offset + 3] = (byte)value;
         }
 
         static string Csv(string value)
