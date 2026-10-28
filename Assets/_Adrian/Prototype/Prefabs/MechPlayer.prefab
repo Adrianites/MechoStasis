@@ -2499,8 +2499,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521320933072969284}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: 0.33669996, y: -0.043220043, z: 0.07304001}
+  m_LocalRotation: {x: -0.24730745, y: 0.73810786, z: -0.35055777, w: -0.52071595}
+  m_LocalPosition: {x: -50.497997, y: 19.424551, z: -14.689848}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2539,7 +2539,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 70
   orthographic: 0
   orthographic size: 10
   m_Depth: 20
@@ -2775,7 +2775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &169383047710291123
 Transform:
   m_ObjectHideFlags: 0
@@ -20871,6 +20871,8 @@ GameObject:
   - component: {fileID: 2984096160530826924}
   - component: {fileID: 5735595196432509742}
   - component: {fileID: 5399919158505499897}
+  - component: {fileID: 5119912779032463623}
+  - component: {fileID: 1826622707082318129}
   m_Layer: 0
   m_Name: FistCollider
   m_TagString: Untagged
@@ -20887,8 +20889,8 @@ Transform:
   m_GameObject: {fileID: 5291681480014592521}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069854, y: -0.013098378, z: 0.013098373, w: 0.7069856}
-  m_LocalPosition: {x: 0.02, y: 0, z: 2.62}
-  m_LocalScale: {x: 2.8123431, y: 3.1108637, z: 0.9901136}
+  m_LocalPosition: {x: 0.02, y: -0, z: 2.65}
+  m_LocalScale: {x: 2.8123431, y: 2.6002142, z: 3.565498}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8403104123755731630}
@@ -20908,7 +20910,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5291681480014592521}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -20983,7 +20985,132 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48bb6d861c62bb4298d725015db6188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FistCollider
-  damage: 20
+  damage: 2
+  punchSound: {fileID: 1826622707082318129}
+--- !u!54 &5119912779032463623
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291681480014592521}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!82 &1826622707082318129
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291681480014592521}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 8068998835371417003, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: bc03753476581e546821950d9d465519, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.691
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5293013968736853236
 GameObject:
   m_ObjectHideFlags: 0
@@ -21875,8 +22002,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5592945727808711184}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: -0.43074465, y: -14.5783, z: -18.22421}
+  m_LocalRotation: {x: -0.2407713, y: 0.7476269, z: -0.3550787, w: -0.50695395}
+  m_LocalPosition: {x: -50.252975, y: 20.027771, z: -16.635746}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33488,8 +33615,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695225305888238161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1702838, y: 0.8296749, z: -0.37140554, w: -0.38039577}
-  m_LocalPosition: {x: -32.01577, y: 32.943993, z: 52.025414}
+  m_LocalRotation: {x: -0.24730745, y: 0.73810786, z: -0.35055777, w: -0.52071595}
+  m_LocalPosition: {x: -50.590458, y: 31.404772, z: -0.72138786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33761,6 +33888,7 @@ GameObject:
   - component: {fileID: 6877153492207154605}
   - component: {fileID: 630788373799110264}
   - component: {fileID: 6351906362956589341}
+  - component: {fileID: 3804309483728582212}
   m_Layer: 0
   m_Name: Exterior
   m_TagString: Player
@@ -34017,11 +34145,88 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FistWeapon
   playerInputHandler: {fileID: 713680245035823030}
-  animators:
-  - {fileID: 5000159176541982954}
-  - {fileID: 5932867641597272830}
-  fistCollider: {fileID: 5291681480014592521}
+  animator: {fileID: 5000159176541982954}
+  fistCollider: {fileID: 5735595196432509742}
   speed: 25
+--- !u!114 &3804309483728582212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8750903723984040774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6efd8c745a7dfc418acdf2d410effb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HeatmapTool.Runtime::HeatmapTool.HeatmapTracker
+  recordInEditor: 1
+  recordInBuilds: 1
+  developmentBuildsOnly: 0
+  sampleInterval: 0.2
+  playerLabel: Player
+  recordFeetPosition: 1
+  sprintSpeed: 6.5
+  idleSpeed: 0.25
+  groundCheckDistance: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  minAirTime: 0.1
+  autoDetectJumps: 1
+  jumpUpwardSpeed: 1.5
+  flushInterval: 10
+  customFolder: 
+  minSessionLength: 5
+  customEvents:
+  - eventName: Shooting Triggered
+    target: {fileID: 8750903723984040774}
+    component: {fileID: 713680245035823030}
+    member: AttackTriggered
+    trigger: 1
+    value: 0
+    location: 0
+    cooldown: 0
+  - eventName: Melee Triggered
+    target: {fileID: 8750903723984040774}
+    component: {fileID: 713680245035823030}
+    member: MeleeAttackTriggered
+    trigger: 1
+    value: 0
+    location: 0
+    cooldown: 0
+  - eventName: Dash Triggered
+    target: {fileID: 8750903723984040774}
+    component: {fileID: 713680245035823030}
+    member: DashTriggered
+    trigger: 1
+    value: 0
+    location: 0
+    cooldown: 0
+  - eventName: Unlock Inner Camera Triggered
+    target: {fileID: 8750903723984040774}
+    component: {fileID: 713680245035823030}
+    member: UnlockCockpitCamTriggered
+    trigger: 1
+    value: 0
+    location: 0
+    cooldown: 0
+  - eventName: Player Dead
+    target: {fileID: 8750903723984040774}
+    component: {fileID: 6118907125889082046}
+    member: isDead
+    trigger: 1
+    value: 0
+    location: 0
+    cooldown: 0
+  - eventName: Enemy Dead
+    target: {fileID: 9153259590877702212, guid: c263df79ca6a1f942b1b75d48c2302eb, type: 3}
+    component: {fileID: 7392508645700013343, guid: c263df79ca6a1f942b1b75d48c2302eb, type: 3}
+    member: isDead
+    trigger: 1
+    value: 0
+    location: 1
+    cooldown: 0
 --- !u!1 &8757659373869840540
 GameObject:
   m_ObjectHideFlags: 0
