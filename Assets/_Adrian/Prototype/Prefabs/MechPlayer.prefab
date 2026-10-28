@@ -20871,6 +20871,8 @@ GameObject:
   - component: {fileID: 2984096160530826924}
   - component: {fileID: 5735595196432509742}
   - component: {fileID: 5399919158505499897}
+  - component: {fileID: 5119912779032463623}
+  - component: {fileID: 1826622707082318129}
   m_Layer: 0
   m_Name: FistCollider
   m_TagString: Untagged
@@ -20887,8 +20889,8 @@ Transform:
   m_GameObject: {fileID: 5291681480014592521}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069854, y: -0.013098378, z: 0.013098373, w: 0.7069856}
-  m_LocalPosition: {x: 0.02, y: 0, z: 2.62}
-  m_LocalScale: {x: 2.8123431, y: 3.1108637, z: 0.9901136}
+  m_LocalPosition: {x: 0.045, y: -0, z: 1.954}
+  m_LocalScale: {x: 2.8123431, y: 1.7308222, z: 0.9901136}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8403104123755731630}
@@ -20908,7 +20910,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5291681480014592521}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -20983,7 +20985,132 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48bb6d861c62bb4298d725015db6188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FistCollider
-  damage: 20
+  damage: 2
+  punchSound: {fileID: 1826622707082318129}
+--- !u!54 &5119912779032463623
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291681480014592521}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!82 &1826622707082318129
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291681480014592521}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 8068998835371417003, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: bc03753476581e546821950d9d465519, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.691
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5293013968736853236
 GameObject:
   m_ObjectHideFlags: 0
@@ -21876,7 +22003,7 @@ Transform:
   m_GameObject: {fileID: 5592945727808711184}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: -0.43074465, y: -14.5783, z: -18.22421}
+  m_LocalPosition: {x: -0.43074477, y: -14.5783, z: -18.224209}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33488,8 +33615,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695225305888238161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1702838, y: 0.8296749, z: -0.37140554, w: -0.38039577}
-  m_LocalPosition: {x: -32.01577, y: 32.943993, z: 52.025414}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.86125994, y: -3.2012997, z: -4.154248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34017,9 +34144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FistWeapon
   playerInputHandler: {fileID: 713680245035823030}
-  animators:
-  - {fileID: 5000159176541982954}
-  - {fileID: 5932867641597272830}
+  animator: {fileID: 5000159176541982954}
   fistCollider: {fileID: 5291681480014592521}
   speed: 25
 --- !u!1 &8757659373869840540
