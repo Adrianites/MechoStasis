@@ -111,6 +111,40 @@ creates the first time you tick it. A tracker's own *Custom Folder* still overri
 - **Layers**: player paths coloured by movement state, event markers, and live updating while in Play mode.
 - **Import / Export**: `.heatmap` (binary, one session per file), `.json` (many sessions in one readable file), and
   CSV export of raw samples or of the finished heatmap cells for spreadsheets.
+- **Top-Down Map**: settings for the level picture saved with CSV exports (see below).
+
+## Top-down map
+
+Exporting either CSV also saves a top-down picture of the open level next to it, so a heatmap you draw from the CSV
+can sit on top of the real map. Exporting `heatmap_cells.csv` writes:
+
+| File | Contents |
+|---|---|
+| `heatmap_cells_map.png` | The level seen straight down. +Z is the top of the image, +X is the right |
+| `heatmap_cells_map_bounds.csv` | One row: `min_x, max_x, min_z, max_z` (world metres the picture covers), size in pixels, pixels per metre |
+
+The picture covers every shown session's samples and events plus *Padding*, so the same map fits both CSV exports.
+*Hide Above* cuts away geometry more than that many metres above the highest floor players walked on, so roofs and
+ceilings don't hide the floor. Turn off *Save With CSV Export* to skip it, or save a map on its own from **Export**
+(optionally with the current heatmap, paths and markers drawn on). It renders the scene that is open, so open the
+level the sessions were recorded in first.
+
+Plotting a CSV over the map with Python:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+cells = pd.read_csv("heatmap_cells.csv")
+b = pd.read_csv("heatmap_cells_map_bounds.csv").iloc[0]
+
+plt.imshow(plt.imread("heatmap_cells_map.png"), extent=[b.min_x, b.max_x, b.min_z, b.max_z])
+plt.scatter(cells.x, cells.z, c=cells.iloc[:, 3], cmap="inferno", marker="s", s=10, alpha=0.7)
+plt.show()
+```
+
+In Excel, use the PNG as the chart's plot-area fill and set the X axis to `min_x`–`max_x` and the Y axis to
+`min_z`–`max_z`.
 
 ## File formats
 

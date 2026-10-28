@@ -24,6 +24,9 @@ namespace HeatmapTool
             new GUIContent("Events", "Where jumps, falls, landings and your own events happened."),
         };
 
+        static readonly int[] MapResolutions = { 1024, 2048, 4096, 8192 };
+        static readonly GUIContent[] MapResolutionLabels = MapResolutions.Select(r => new GUIContent($"{r} px")).ToArray();
+
         [Serializable]
         sealed class SessionEntry
         {
@@ -51,7 +54,11 @@ namespace HeatmapTool
             public List<string> watchedFolders = new List<string>();
             public List<string> ignoredSessions = new List<string>();
             public List<SessionEntry> sessions = new List<SessionEntry>();
-            public bool foldSessions = true, foldRecording = true, foldData = true, foldDisplay = true, foldLayers = true;
+            public bool saveMapWithCsv = true;
+            public int mapResolution = 2048;
+            public float mapHideAbove = 3f;
+            public float mapPadding = 5f;
+            public bool foldSessions = true, foldRecording = true, foldData = true, foldDisplay = true, foldLayers = true, foldMap = true;
         }
 
         sealed class LoadedSession
@@ -474,7 +481,11 @@ namespace HeatmapTool
 
         bool PassesSceneFilter(HeatmapSession session)
         {
-            if (!settings.currentSceneOnly) return true;
+            return !settings.currentSceneOnly || IsInActiveScene(session);
+        }
+
+        static bool IsInActiveScene(HeatmapSession session)
+        {
             Scene scene = SceneManager.GetActiveScene();
             if (!string.IsNullOrEmpty(scene.path) && !string.IsNullOrEmpty(session.scenePath))
                 return string.Equals(scene.path, session.scenePath, StringComparison.OrdinalIgnoreCase);
@@ -520,6 +531,7 @@ namespace HeatmapTool
             DrawDisplaySection();
             DrawLayersSection();
             if (EditorGUI.EndChangeCheck()) QueueRebuild();
+            DrawMapSection();
             DrawSummary();
             EditorGUILayout.EndScrollView();
 
@@ -866,6 +878,27 @@ namespace HeatmapTool
             EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
+        void DrawMapSection()
+        {
+            settings.foldMap = EditorGUILayout.BeginFoldoutHeaderGroup(settings.foldMap, "Top-Down Map");
+            if (settings.foldMap)
+            {
+                settings.saveMapWithCsv = EditorGUILayout.Toggle(new GUIContent("Save With CSV Export",
+                    "Exporting a .csv also saves a top-down picture of this level beside it (name_map.png), plus " +
+                    "name_map_bounds.csv with the world X/Z area the picture covers, so you can plot the CSV on top of it."),
+                    settings.saveMapWithCsv);
+                settings.mapResolution = EditorGUILayout.IntPopup(new GUIContent("Resolution",
+                    "Pixels along the longer side of the picture."), settings.mapResolution, MapResolutionLabels, MapResolutions);
+                settings.mapHideAbove = EditorGUILayout.Slider(new GUIContent("Hide Above (m)",
+                    "Cut away anything more than this above the highest floor players walked on, so roofs and ceilings " +
+                    "don't cover the map."), settings.mapHideAbove, 0.5f, 50f);
+                settings.mapPadding = EditorGUILayout.Slider(new GUIContent("Padding (m)",
+                    "Extra space shown around the area players visited."), settings.mapPadding, 0f, 50f);
+                EditorGUILayout.LabelField("Save a map on its own from Export.", EditorStyles.wordWrappedMiniLabel);
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+        }
+
         void DrawSummary()
         {
             EditorGUILayout.Space();
@@ -989,6 +1022,9 @@ namespace HeatmapTool
                 menu.AddItem(new GUIContent($"{what} as .csv (raw samples and events)..."), false, ExportCsv);
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Current heatmap cells as .csv..."), false, ExportCells);
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Top-down map of the level (.png)..."), false, () => ExportMap(includeHeatmap: false));
+                menu.AddItem(new GUIContent("Top-down map with the heatmap drawn on (.png)..."), false, () => ExportMap(includeHeatmap: true));
             }
             menu.DropDown(rect);
         }
@@ -1051,7 +1087,7 @@ namespace HeatmapTool
             string path = EditorUtility.SaveFilePanel("Export sessions as CSV", LastFolder, "heatmap_samples", "csv");
             if (string.IsNullOrEmpty(path)) return;
             LastFolder = Path.GetDirectoryName(path);
-            RunExport(path, () => HeatmapIO.SaveCsv(shownData, path));
+            if (RunExport(path, () => HeatmapIO.SaveCsv(shownData, path))) SaveMapWithCsv(path);
         }
 
         void ExportCells()
@@ -1059,20 +1095,102 @@ namespace HeatmapTool
             string path = EditorUtility.SaveFilePanel("Export heatmap cells as CSV", LastFolder, "heatmap_cells", "csv");
             if (string.IsNullOrEmpty(path)) return;
             LastFolder = Path.GetDirectoryName(path);
-            RunExport(path, () => HeatmapIO.SaveCellsCsv(grid, path));
+            if (RunExport(path, () => HeatmapIO.SaveCellsCsv(grid, path))) SaveMapWithCsv(path);
         }
 
-        void RunExport(string path, Action export)
+        void ExportMap(bool includeHeatmap)
+        {
+            string scene = SceneManager.GetActiveScene().name;
+            string name = (string.IsNullOrEmpty(scene) ? "level" : scene) + HeatmapMapCapture.ImageSuffix;
+            string path = EditorUtility.SaveFilePanel("Save top-down map", LastFolder, name, "png");
+            if (string.IsNullOrEmpty(path)) return;
+            LastFolder = Path.GetDirectoryName(path);
+            RunExport(path, () => SaveMap(path, includeHeatmap));
+        }
+
+        void SaveMapWithCsv(string csvPath)
+        {
+            if (!settings.saveMapWithCsv) return;
+            string mapPath = Path.Combine(Path.GetDirectoryName(csvPath) ?? "",
+                Path.GetFileNameWithoutExtension(csvPath) + HeatmapMapCapture.ImageSuffix + ".png");
+            try
+            {
+                SaveMap(mapPath, includeHeatmap: false);
+                status = $"Exported {Path.GetFileName(csvPath)} with {Path.GetFileName(mapPath)}";
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Heatmap] Couldn't save the map picture: {e.Message}");
+            }
+        }
+
+        void SaveMap(string path, bool includeHeatmap)
+        {
+            if (rebuildQueued) Rebuild();
+            if (!TryGetMapArea(out Bounds area, out float floorTop))
+                throw new InvalidOperationException("The shown sessions have no recorded positions to frame.");
+
+            bool hideView = view != null && !includeHeatmap;
+            if (hideView) view.SetLayersVisible(false, false, false);
+            try
+            {
+                HeatmapMapCapture.Save(path, area, floorTop + settings.mapHideAbove, settings.mapResolution);
+            }
+            finally
+            {
+                if (hideView) view.SetLayersVisible(settings.showHeat, settings.showMarkers, settings.showPaths);
+            }
+
+            if (shownData.Any(s => !IsInActiveScene(s)))
+            {
+                Debug.LogWarning($"[Heatmap] The map shows {SceneManager.GetActiveScene().name}, but some shown sessions " +
+                                 "were recorded in other scenes.");
+            }
+        }
+
+        // Covers every shown sample and event, so the same map lines up with both CSV exports.
+        bool TryGetMapArea(out Bounds area, out float floorTop)
+        {
+            area = default;
+            floorTop = float.NegativeInfinity;
+            bool any = false;
+            foreach (HeatmapSession session in shownData)
+            {
+                foreach (HeatmapSample sample in session.samples)
+                {
+                    Encapsulate(ref area, ref any, sample.position);
+                    if (sample.state != HeatmapMoveState.Airborne) floorTop = Mathf.Max(floorTop, sample.position.y);
+                }
+                foreach (HeatmapEvent e in session.events) Encapsulate(ref area, ref any, e.position);
+            }
+            if (!any) return false;
+
+            if (grid.Cells.Count > 0) area.Encapsulate(grid.Bounds);
+            if (float.IsNegativeInfinity(floorTop)) floorTop = area.max.y;
+            area.Expand(new Vector3(settings.mapPadding * 2f, 0f, settings.mapPadding * 2f));
+            return true;
+        }
+
+        static void Encapsulate(ref Bounds bounds, ref bool any, Vector3 point)
+        {
+            if (any) bounds.Encapsulate(point);
+            else bounds = new Bounds(point, Vector3.zero);
+            any = true;
+        }
+
+        bool RunExport(string path, Action export)
         {
             try
             {
                 export();
                 status = $"Exported {Path.GetFileName(path)}";
                 EditorUtility.RevealInFinder(path);
+                return true;
             }
             catch (Exception e)
             {
                 Debug.LogError($"[Heatmap] Export failed: {e.Message}");
+                return false;
             }
         }
 

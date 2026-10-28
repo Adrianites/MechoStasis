@@ -289,6 +289,16 @@ namespace HeatmapTool
             }
         }
 
+        public static void SaveMapBoundsCsv(HeatmapMapInfo map, string path)
+        {
+            EnsureFolderFor(path);
+            CultureInfo ci = CultureInfo.InvariantCulture;
+            using var writer = new StreamWriter(path, false, Utf8);
+            writer.WriteLine("image,scene,width,height,pixels_per_metre,min_x,max_x,min_z,max_z");
+            writer.WriteLine(string.Format(ci, "{0},{1},{2},{3},{4:0.######},{5:0.###},{6:0.###},{7:0.###},{8:0.###}",
+                Csv(map.image), Csv(map.scene), map.width, map.height, map.pixelsPerMetre, map.minX, map.maxX, map.minZ, map.maxZ));
+        }
+
         static string Csv(string value)
         {
             if (string.IsNullOrEmpty(value)) return "";
@@ -298,7 +308,7 @@ namespace HeatmapTool
 
         #endregion
 
-        static void EnsureFolderFor(string path)
+        internal static void EnsureFolderFor(string path)
         {
             string folder = Path.GetDirectoryName(path);
             if (!string.IsNullOrEmpty(folder)) Directory.CreateDirectory(folder);
