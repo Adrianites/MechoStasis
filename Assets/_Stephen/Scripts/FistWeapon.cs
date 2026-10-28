@@ -6,7 +6,7 @@ public class FistWeapon : MonoBehaviour
     [Header("References")]
     [SerializeField] private InputHandler playerInputHandler;
     [SerializeField] private Animator animator;
-    [SerializeField] private GameObject fistCollider;
+    [SerializeField] private Collider fistCollider;
 
     [Header("Settings")]
     [SerializeField] private float speed = 25f;
@@ -22,7 +22,7 @@ public class FistWeapon : MonoBehaviour
 
         if (fistCollider != null)
         {
-            fistCollider.SetActive(false);
+            fistCollider.enabled = false;
         }
     }
 
@@ -43,7 +43,7 @@ public class FistWeapon : MonoBehaviour
 
         if (fistCollider != null)
         {
-            fistCollider.SetActive(false);
+            fistCollider.enabled = false;
         }
 
         if (playerInputHandler == null)
@@ -75,7 +75,7 @@ public class FistWeapon : MonoBehaviour
         attackHeld = false;
         if (fistCollider != null)
         {
-            fistCollider.SetActive(false);
+            fistCollider.enabled = false;
         }
         Debug.Log("Melee attack canceled!");
     }
@@ -90,7 +90,7 @@ public class FistWeapon : MonoBehaviour
             animator.SetTrigger(AnimStrings.Punch);
             if (fistCollider != null)
             {
-                fistCollider.SetActive(true);
+                fistCollider.enabled = true;
             }
         }
         else
@@ -98,7 +98,7 @@ public class FistWeapon : MonoBehaviour
             Debug.Log("Melee attack canceled!");
             if (fistCollider != null)
             {
-                fistCollider.SetActive(false);
+                fistCollider.enabled = false;
             }
         }
     }

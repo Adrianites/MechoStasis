@@ -20889,8 +20889,8 @@ Transform:
   m_GameObject: {fileID: 5291681480014592521}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069854, y: -0.013098378, z: 0.013098373, w: 0.7069856}
-  m_LocalPosition: {x: 0.045, y: -0, z: 1.954}
-  m_LocalScale: {x: 2.8123431, y: 1.7308222, z: 0.9901136}
+  m_LocalPosition: {x: 0.02, y: -0, z: 2.65}
+  m_LocalScale: {x: 2.8123431, y: 2.6002142, z: 3.565498}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8403104123755731630}
@@ -22003,7 +22003,7 @@ Transform:
   m_GameObject: {fileID: 5592945727808711184}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.018523902, z: 0, w: 0.99982846}
-  m_LocalPosition: {x: -0.43074477, y: -14.5783, z: -18.224209}
+  m_LocalPosition: {x: -0.43074465, y: -14.5783, z: -18.22421}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33616,7 +33616,7 @@ Transform:
   m_GameObject: {fileID: 8695225305888238161}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.86125994, y: -3.2012997, z: -4.154248}
+  m_LocalPosition: {x: -0.86125994, y: -3.2012997, z: -4.154249}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34145,7 +34145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FistWeapon
   playerInputHandler: {fileID: 713680245035823030}
   animator: {fileID: 5000159176541982954}
-  fistCollider: {fileID: 5291681480014592521}
+  fistCollider: {fileID: 5735595196432509742}
   speed: 25
 --- !u!1 &8757659373869840540
 GameObject:
