@@ -126,8 +126,9 @@ can sit on top of the real map. Exporting `heatmap_cells.csv` writes:
 
 The picture covers every shown session's samples and events plus *Padding*, so the same map fits both CSV exports.
 *Hide Above* cuts away geometry more than that many metres above the highest floor players walked on, so roofs and
-ceilings don't hide the floor. Turn off *Save With CSV Export* to skip it, or save a map on its own from **Export**
-(optionally with the current heatmap, paths and markers drawn on). It renders the scene that is open, so open the
+ceilings don't hide the floor. Where the cut passes through something solid, such as a mountain, a tall rock or a
+wall, the picture shows that solid's top rather than its hollow inside. Turn off *Save With CSV Export* to skip it, or
+save a map on its own from **Export** (optionally with the current heatmap, paths and markers drawn on). It renders the scene that is open, so open the
 level the sessions were recorded in first.
 
 Plotting a CSV over the map with Python:
@@ -151,8 +152,18 @@ In Excel, use the PNG as the chart's plot-area fill and set the X axis to `min_x
 
 With *Save Heightmap* on, every map also gets a `_height.png`. Each pixel holds the height of the highest surface
 under it: meshes and terrain below *Hide Above*, seen from the same camera as the map, so pixel (x, y) in both
-images is the same spot. Terrain trees, grass and particles are left out so the surface stays clean. Pixels with
-nothing under them are black.
+images is the same spot. Terrain trees, grass and particles are left out so the surface stays clean, and only the most
+detailed level of each LOD group is used. Pixels with nothing under them take the height of the nearest surface.
+
+Where *Hide Above* cuts through something solid, such as a mountain, a tall rock or a wall, the heightmap keeps the
+solid's real top instead of looking into it, so outdoor levels keep their full shape. It tells solids from roofs by
+their normals: above the cut, a surface facing up counts +1 and one facing down -1, and a positive total means the
+cut is inside something. A roof made of a single plane facing up, with no underside, therefore counts as solid; give
+it some thickness, or raise *Hide Above* above it.
+
+After saving, the Console reports how well the heightmap fits the places players stood (it should be well above 80%).
+
+Keep the PNG as it was exported: opening and re-saving it in an image editor can rotate it or convert it to 8-bit.
 
 To get metres back: `height = min_y + gray / 65535 * (max_y - min_y)`. For displacement in a 3D tool, use the PNG as
 the displacement or height texture on a plane that is `max_x - min_x` by `max_z - min_z` metres, with a strength of

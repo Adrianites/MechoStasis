@@ -1135,11 +1135,23 @@ namespace HeatmapTool
             if (!TryGetMapArea(out Bounds area, out float floorTop))
                 throw new InvalidOperationException("The shown sessions have no recorded positions to frame.");
 
+            var standing = new List<Vector3>();
+            foreach (HeatmapSession session in shownData)
+                foreach (HeatmapSample sample in session.samples)
+                    if (sample.state != HeatmapMoveState.Airborne) standing.Add(sample.position);
+
             bool hideView = view != null && !includeHeatmap;
             if (hideView) view.SetLayersVisible(false, false, false);
             try
             {
-                HeatmapMapCapture.Save(path, area, floorTop + settings.mapHideAbove, settings.mapResolution, settings.saveHeightmap);
+                HeatmapMapInfo info = HeatmapMapCapture.Save(path, area, floorTop + settings.mapHideAbove, settings.mapResolution,
+                    settings.saveHeightmap, standing);
+                if (info.heightFit >= 0f)
+                {
+                    string fit = $"[Heatmap] The heightmap fits {info.heightFit:P0} of the places players stood.";
+                    if (info.heightFit < 0.6f) Debug.LogWarning(fit + " Parts of it are probably wrong: check that the open scene is the one the sessions were recorded in.");
+                    else Debug.Log(fit);
+                }
             }
             finally
             {
