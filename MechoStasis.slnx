@@ -1,3 +1,5 @@
 ﻿<Solution>
+  <Project Path="HeatmapTool.Runtime.csproj" />
+  <Project Path="HeatmapTool.Editor.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
 </Solution>
