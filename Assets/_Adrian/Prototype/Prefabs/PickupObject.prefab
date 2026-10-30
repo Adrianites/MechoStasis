@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   health: 1
   damage: 5
-  explosionRadius: 5
+  explosionRadius: 6.7
   explosionEffect: {fileID: 90618664603082012, guid: b0dbb8be62c07884ca2287820078d801, type: 3}
   delayBeforeDestroy: 0.1
   exploded: 0

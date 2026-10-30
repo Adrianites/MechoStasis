@@ -4923,11 +4923,11 @@ AudioSource:
   m_GameObject: {fileID: 90618664603082012}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7626603389867253731, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: b92bcc213d26bbf4195947c1d5219f3f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.657
   m_Pitch: 1
   Loop: 0
   Mute: 0
