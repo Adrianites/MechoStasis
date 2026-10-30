@@ -994,7 +994,7 @@ AudioSource:
   m_GameObject: {fileID: 324454429249755818}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 8068998835371417003, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
+  OutputAudioMixerGroup: {fileID: 1963652544499463478, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -14483,9 +14483,9 @@ AudioSource:
   m_GameObject: {fileID: 4341898668612373174}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6299089027707534582, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: cb1b324eb4a566945b9e5cc8c83439cc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -16332,9 +16332,9 @@ AudioSource:
   m_GameObject: {fileID: 4945642866435258321}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -4533339662405229635, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 3ee4c1512168ebf40b2b1779529ad660, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -16976,7 +16976,7 @@ AudioSource:
   m_GameObject: {fileID: 5082926880977462247}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -2270288919134786052, guid: de7e1aff73789ff4b9a97887edd4ed01, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: b2bd522527dc0d344b5a905a724c8fa7, type: 3}
   m_PlayOnAwake: 0
@@ -27580,7 +27580,8 @@ MonoBehaviour:
   coyoteTime: 0.1
   coyoteTimeCounter: 0
   jumpRequested: 0
-  mouseSensitivity: 140
+  mouseLookSensitivity: 0.1
+  controllerLookSensitivity: 150
   upDownLookRange: 80
   cockpitYawRange: 60
   cockpitPitchRange: 60
