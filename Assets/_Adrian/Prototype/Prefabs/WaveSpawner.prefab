@@ -84,7 +84,7 @@ MonoBehaviour:
   - {fileID: 2348310438641123216}
   - {fileID: 7574516318705636345}
   - {fileID: 4005076121036077075}
-  timeBetweenWaves: 5
+  timeBetweenWaves: 15
   timeBetweenSpawns: 1
   baseCount: 10
 --- !u!1 &6759617350978299292
