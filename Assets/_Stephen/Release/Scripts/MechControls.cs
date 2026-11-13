@@ -5,7 +5,7 @@ using Unity.UI;
 
 public class MechControls : MonoBehaviour
 {
-    [Header("Movement Settings")]
+   /* [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float currentMoveSpeed;
 
@@ -52,7 +52,7 @@ public class MechControls : MonoBehaviour
 
     private void HandleMovement()
     {
-      Vector2 mechInput = playerInput.MovementInput;        
+      //Vector2 mechInput = playerInput.MovementInput;        
       mechMovement = new Vector3(playerInput.MovementInput.x, 0, playerInput.MovementInput.y);
       //mechMovement = new Vector3(input.x, 0, input.y);
       rb.AddForce(mechMovement * currentMoveSpeed);
@@ -67,7 +67,7 @@ public class MechControls : MonoBehaviour
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
 
 
-    }
+    } */
         
     
 

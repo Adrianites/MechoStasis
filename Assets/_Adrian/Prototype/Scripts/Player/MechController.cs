@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.Collections;
 
 public class MechController : MonoBehaviour, IDamageable
 {
@@ -91,6 +92,17 @@ public class MechController : MonoBehaviour, IDamageable
     private bool wasGrounded;
     private float footstepTimer;
 
+    Rigidbody rb;
+
+    private LayerMask groundLayer;
+    private float groundDistance = 0.2f;
+
+    bool isGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, groundDistance, groundLayer);
+    }
+
+
     private void Awake()
     {
         if (deathCanvas != null)
@@ -101,6 +113,10 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void Start()
     {   
+        rb = gameObject.GetComponent<Rigidbody>();
+
+
+
         if (hitEffect != null)
         {
             hitEffect.SetActive(false);
@@ -123,7 +139,7 @@ public class MechController : MonoBehaviour, IDamageable
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        wasGrounded = characterController != null && characterController.isGrounded;
+        wasGrounded = rb != null && isGrounded();
         previousVerticalVelocity = currentMovement.y;
 
         if (cockpitCam != null)
@@ -183,7 +199,7 @@ public class MechController : MonoBehaviour, IDamageable
         hitEffect.SetActive(false);
     }
 
-    private void Update()
+    private void Update() //read inputs
     {
         if (characterController == null || playerInputHandler == null)
             return;
@@ -194,117 +210,56 @@ public class MechController : MonoBehaviour, IDamageable
         HandleRotation();
     }
 
+    private void FixedUpdate() //apply physics
+    {
+        UpdateFootsteps(isGrounded() && currentMovement.magnitude > 0.1f, new Vector3(currentMovement.x, 0f, currentMovement.z).magnitude);
+        rb.MovePosition(rb.position + currentMovement * Time.fixedDeltaTime);
+    }
+
     private void HandleMovement()
     {
-        //animators[0].SetBool(AnimStrings.IsWalking, false);
-        //animators[1].SetBool(AnimStrings.IsWalking, false);
-        
-        dashCooldownTimer = Mathf.Min(dashCooldown, dashCooldownTimer + Time.deltaTime);
-
-        if (dashCooldownSlider != null)
-        {
-            dashCooldownSlider.value = dashCooldownTimer;
-        }
-
-        bool groundedBeforeMove = characterController.isGrounded;
-        //have to change this because its messing up the idle animation
-        //animators[0].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // right hand animator
-        //animators[1].SetBool(AnimStrings.IsWalking, groundedBeforeMove); // left hand animator
-
         Vector2 input = playerInputHandler.MovementInput;
-        bool sprinting = playerInputHandler.SprintTriggered;
+        bool isSprinting = playerInputHandler.SprintTriggered;
 
-        Vector3 inputDirection = new Vector3(input.x, 0f, input.y);
-        Vector3 worldDirection = transform.TransformDirection(inputDirection);
+        float currentSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
+        Vector3 mechMovement = new Vector3(input.x, 0f, input.y) * currentSpeed;
 
-        if (worldDirection.sqrMagnitude > 1f)
-            worldDirection.Normalize();
+        mechMovement = transform.TransformDirection(mechMovement);
 
-        Vector3 horizontalVelocity;
-        float effectiveMoveSpeed = moveSpeed * (sprinting ? sprintMultiplier : 1f);
+        rb.AddForce(mechMovement * (isGrounded() ? 1f : airControlMultiplier));
 
-        if (dashRequested)
-        {
-            dashRequested = false;
+        
 
-            if (dashCooldownTimer >= dashCooldown)
-            {
-                DashAudioSource?.Play();
-                dashTimer = dashDuration;
-                dashCooldownTimer = 0f;
-
-                dashDirection = worldDirection.sqrMagnitude > 0.001f
-                    ? worldDirection.normalized
-                    : transform.forward;
-            }
-        }
-
-        if (dashTimer > 0f)
-        {
-            dashTimer -= Time.deltaTime;
-            horizontalVelocity = dashDirection * dashSpeed;
-        }
-        else if (groundedBeforeMove)
+        if (isGrounded())
         {
             coyoteTimeCounter = coyoteTime;
-            horizontalVelocity = worldDirection * effectiveMoveSpeed;
 
-            if (currentMovement.y < 0f)
-                currentMovement.y = -0.5f;
+            if (jumpRequested)
+            {
+                currentMovement.y = jumpForce;
+                JumpAudioSource?.Play();
+                jumpRequested = false;
+            }
         }
         else
         {
             coyoteTimeCounter -= Time.deltaTime;
 
-            if (worldDirection.sqrMagnitude > 0.001f)
+            if (coyoteTimeCounter > 0f && jumpRequested)
             {
-                horizontalVelocity =
-                    worldDirection * effectiveMoveSpeed * airControlMultiplier;
+                currentMovement.y = jumpForce;
+                JumpAudioSource?.Play();
+                jumpRequested = false;
             }
             else
             {
-                horizontalVelocity = new Vector3(
-                    currentMovement.x,
-                    0f,
-                    currentMovement.z
-                );
+                currentMovement.y += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
             }
-
-            currentMovement.y +=
-                Physics.gravity.y * gravityMultiplier * Time.deltaTime;
         }
 
-        currentMovement.x = horizontalVelocity.x;
-        currentMovement.z = horizontalVelocity.z;
 
-        if (jumpRequested && coyoteTimeCounter > 0f)
-        {
-            animators[0].SetTrigger(AnimStrings.Jump); // right hand animator
-            animators[1].SetTrigger(AnimStrings.Jump); // left hand animator
-            JumpAudioSource?.Play();
-            currentMovement.y = jumpForce;
-            coyoteTimeCounter = 0f;
-            jumpRequested = false;
-        }
 
-        Vector3 currentHorizontalVelocity =
-            new Vector3(currentMovement.x, 0f, currentMovement.z);
 
-        float fallingSpeed = Mathf.Max(0f, -currentMovement.y);
-
-        characterController.Move(currentMovement * Time.deltaTime);
-        //better place to put the anim strings but still has a massive delay
-        animators[0].SetBool(AnimStrings.IsWalking, currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove); // right hand animator
-        animators[1].SetBool(AnimStrings.IsWalking, currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove); // left hand animator
-
-        bool isWalking = currentHorizontalVelocity.sqrMagnitude > 0.1f && groundedBeforeMove && dashTimer <= 0f;
-        UpdateFootsteps(isWalking, currentHorizontalVelocity.magnitude);
-
-        bool groundedAfterMove = characterController.isGrounded;
-
-        previousVerticalVelocity = currentMovement.y;
-        wasGrounded = groundedAfterMove;
-        previousHorizontalVelocity = currentHorizontalVelocity;
     }
 
     private void UpdateFootsteps(bool isWalking, float horizontalSpeed)
