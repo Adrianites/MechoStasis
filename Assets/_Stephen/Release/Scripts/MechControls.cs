@@ -8,18 +8,26 @@ public class MechControls : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float currentMoveSpeed;
-    
+
+    [Header("Camera Settings")]
+    [SerializeField] private float sensitivity = 1f;
+    [SerializeField] private float mouseSensitivity = 100f;
+
+
     [Header("Rotation Settings")]
     [SerializeField] private float rotationSpeed = 100f;
     
     [Header("References")]
     [SerializeField] private Transform mechTransform;
-    [SerializeField] private Rigidbody mechRigidbody;
+    [SerializeField] private Rigidbody mechBody;
     [SerializeField] private UserInputManager playerInput;
     [SerializeField] private Camera mechCamera;
 
-
     Rigidbody rb;
+
+    private Vector3 mechMovement;
+
+
 
    
 
@@ -39,18 +47,28 @@ public class MechControls : MonoBehaviour
 
     private void FixedUpdate() //apply physics
     {
-        rb.MovePosition(rb.position + new Vector3(1,0,0) * Time.fixedDeltaTime * currentMoveSpeed);
+        rb.MovePosition(rb.position + mechMovement * Time.fixedDeltaTime * currentMoveSpeed);
     }
 
     private void HandleMovement()
     {
-      Vector2 input = playerInput.MovementInput;
-      rb.AddForce(new Vector3(input.x, 0, input.y) * currentMoveSpeed);
-
+      Vector2 mechInput = playerInput.MovementInput;        
+      mechMovement = new Vector3(playerInput.MovementInput.x, 0, playerInput.MovementInput.y);
+      //mechMovement = new Vector3(input.x, 0, input.y);
+      rb.AddForce(mechMovement * currentMoveSpeed);
     }
 
     private void HandleRotation()
     {
-        
+        Vector2 lookInput = playerInput.RotationInput;
+
+        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
+
+        float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
+
+
     }
+        
+    
+
 }
