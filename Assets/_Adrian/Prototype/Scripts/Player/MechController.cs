@@ -94,7 +94,7 @@ public class MechController : MonoBehaviour, IDamageable
 
     Rigidbody rb;
 
-    private LayerMask groundLayer;
+    [SerializeField] private LayerMask groundLayer;
     private float groundDistance = 0.2f;
 
     bool isGrounded()
@@ -201,34 +201,38 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void Update() //read inputs
     {
-        if (characterController == null || playerInputHandler == null)
-            return;
         if (isDead)
             return;
-
         HandleMovement();
         HandleRotation();
     }
 
     private void FixedUpdate() //apply physics
     {
+        if (isDead)
+            return;
+        
+        rb.linearVelocity = new Vector3(currentMovement.x, currentMovement.y, currentMovement.z);
+
         UpdateFootsteps(isGrounded() && currentMovement.magnitude > 0.1f, new Vector3(currentMovement.x, 0f, currentMovement.z).magnitude);
-        rb.MovePosition(rb.position + currentMovement * Time.fixedDeltaTime);
     }
 
     private void HandleMovement()
     {
         Vector2 input = playerInputHandler.MovementInput;
+        Debug.Log($"Input: {input.x}, {input.y}");
         bool isSprinting = playerInputHandler.SprintTriggered;
 
         float currentSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
-        Vector3 mechMovement = new Vector3(input.x, 0f, input.y) * currentSpeed;
 
-        mechMovement = transform.TransformDirection(mechMovement);
+        Vector3 inputDirection = new Vector3(input.x, 0f, input.y);
+        inputDirection = transform.TransformDirection(inputDirection).normalized;
 
-        rb.AddForce(mechMovement * (isGrounded() ? 1f : airControlMultiplier));
+        float speedMultiplier = isGrounded() ? 1f : airControlMultiplier;
 
-        
+        currentMovement.x = inputDirection.x * currentSpeed * speedMultiplier;
+        currentMovement.z = inputDirection.z * currentSpeed * speedMultiplier;
+
 
         if (isGrounded())
         {
