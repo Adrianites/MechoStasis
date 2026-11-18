@@ -10851,7 +10851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4001458441734482869, guid: b4cba2f9d5c3c5142985334b9f848233, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4050952992375995192, guid: b4cba2f9d5c3c5142985334b9f848233, type: 3}
       propertyPath: enemyPool
