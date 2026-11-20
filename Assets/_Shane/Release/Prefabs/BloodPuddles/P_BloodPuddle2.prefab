@@ -1,0 +1,191 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4705832224432172226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2553696990142755379}
+  m_Layer: 0
+  m_Name: P_BloodPuddle2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2553696990142755379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4705832224432172226}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: -0.000000029802322, z: -0, w: 0.70710677}
+  m_LocalPosition: {x: 1843.04, y: 594.907, z: 7815.4}
+  m_LocalScale: {x: 200, y: 200, z: 200}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5586191251026396461}
+  - {fileID: 8528520725795590034}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &5335809146299065030
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2553696990142755379}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0026159668
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.008134765
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.005447694
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.000000029802322
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.000000021073422
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.000000021073426
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d2f15000d36c194580d23da36424359, type: 2}
+    - target: {fileID: 919132149155446097, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+      propertyPath: m_Name
+      value: BloodPuddle2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+--- !u!4 &5586191251026396461 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 72bba0a4a0927724d88c6486be907916, type: 3}
+  m_PrefabInstance: {fileID: 5335809146299065030}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8201579489388865657
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2553696990142755379}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.054999992
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.096
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.27975148
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.00601
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.01055
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00792
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9825404
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.00000002070549
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.18604912
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 21.445
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d2f15000d36c194580d23da36424359, type: 2}
+    - target: {fileID: 919132149155446097, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+      propertyPath: m_Name
+      value: BloodPuddle (4)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+--- !u!4 &8528520725795590034 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 14ed06b9bb887af488d799d62c68baf8, type: 3}
+  m_PrefabInstance: {fileID: 8201579489388865657}
+  m_PrefabAsset: {fileID: 0}
