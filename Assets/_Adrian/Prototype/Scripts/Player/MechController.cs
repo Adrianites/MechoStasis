@@ -217,9 +217,52 @@ public class MechController : MonoBehaviour, IDamageable
         if (rb == null)
             return;
 
-        rb.linearVelocity = currentMovement;
+        bool isDashing = UpdateDash();
+        Vector3 velocity = currentMovement;
+        if (isDashing)
+        {
+            velocity.x = dashDirection.x * dashSpeed;
+            velocity.z = dashDirection.z * dashSpeed;
+        }
 
-        UpdateFootsteps(isGrounded() && currentMovement.magnitude > 0.1f, new Vector3(currentMovement.x, 0f, currentMovement.z).magnitude);
+        rb.linearVelocity = velocity;
+
+        UpdateFootsteps(
+            !isDashing && isGrounded() && new Vector2(currentMovement.x, currentMovement.z).magnitude > 0.1f,
+            new Vector3(currentMovement.x, 0f, currentMovement.z).magnitude
+        );
+    }
+
+    private bool UpdateDash()
+    {
+        dashCooldownTimer = Mathf.Min(dashCooldown, dashCooldownTimer + Time.fixedDeltaTime);
+        if (dashCooldownSlider != null)
+            dashCooldownSlider.value = dashCooldownTimer;
+
+        if (dashRequested)
+        {
+            dashRequested = false;
+            if (dashCooldownTimer >= dashCooldown)
+            {
+                Vector3 horizontalMovement = new Vector3(currentMovement.x, 0f, currentMovement.z);
+                dashDirection = horizontalMovement.sqrMagnitude > 0.001f
+                    ? horizontalMovement.normalized
+                    : Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+
+                dashTimer = dashDuration;
+                dashCooldownTimer = 0f;
+                if (dashCooldownSlider != null)
+                    dashCooldownSlider.value = dashCooldownTimer;
+
+                DashAudioSource?.Play();
+            }
+        }
+
+        bool isDashing = dashTimer > 0f;
+        if (isDashing)
+            dashTimer = Mathf.Max(0f, dashTimer - Time.fixedDeltaTime);
+
+        return isDashing;
     }
 
     private void HandleMovement()
