@@ -93,18 +93,24 @@ public class MechController : MonoBehaviour, IDamageable
     private float footstepTimer;
 
     Rigidbody rb;
+    private Collider bodyCollider;
 
     [SerializeField] private LayerMask groundLayer;
     private float groundDistance = 0.2f;
 
-    bool isGrounded()
+    private bool isGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundDistance, groundLayer);
+        Vector3 origin = bodyCollider != null ? bodyCollider.bounds.center : transform.position;
+        float colliderExtent = bodyCollider != null ? bodyCollider.bounds.extents.y : 0f;
+        return Physics.Raycast(origin, Vector3.down, colliderExtent + groundDistance, groundLayer, QueryTriggerInteraction.Ignore);
     }
 
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
+        bodyCollider = GetComponent<Collider>();
+
         if (deathCanvas != null)
         {
             deathCanvas.SetActive(false);
@@ -113,10 +119,6 @@ public class MechController : MonoBehaviour, IDamageable
 
     private void Start()
     {   
-        rb = gameObject.GetComponent<Rigidbody>();
-
-
-
         if (hitEffect != null)
         {
             hitEffect.SetActive(false);
@@ -212,7 +214,10 @@ public class MechController : MonoBehaviour, IDamageable
         if (isDead)
             return;
         
-        rb.linearVelocity = new Vector3(currentMovement.x, currentMovement.y, currentMovement.z);
+        if (rb == null)
+            return;
+
+        rb.linearVelocity = currentMovement;
 
         UpdateFootsteps(isGrounded() && currentMovement.magnitude > 0.1f, new Vector3(currentMovement.x, 0f, currentMovement.z).magnitude);
     }
@@ -220,23 +225,25 @@ public class MechController : MonoBehaviour, IDamageable
     private void HandleMovement()
     {
         Vector2 input = playerInputHandler.MovementInput;
-        Debug.Log($"Input: {input.x}, {input.y}");
         bool isSprinting = playerInputHandler.SprintTriggered;
 
         float currentSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
 
-        Vector3 inputDirection = new Vector3(input.x, 0f, input.y);
-        inputDirection = transform.TransformDirection(inputDirection).normalized;
+        Vector3 inputDirection = transform.TransformDirection(new Vector3(input.x, 0f, input.y));
+        inputDirection = Vector3.ClampMagnitude(inputDirection, 1f);
 
-        float speedMultiplier = isGrounded() ? 1f : airControlMultiplier;
+        bool grounded = isGrounded();
+        float speedMultiplier = grounded ? 1f : airControlMultiplier;
 
         currentMovement.x = inputDirection.x * currentSpeed * speedMultiplier;
         currentMovement.z = inputDirection.z * currentSpeed * speedMultiplier;
 
 
-        if (isGrounded())
+        if (grounded)
         {
             coyoteTimeCounter = coyoteTime;
+            if (currentMovement.y < 0f)
+                currentMovement.y = 0f;
 
             if (jumpRequested)
             {
