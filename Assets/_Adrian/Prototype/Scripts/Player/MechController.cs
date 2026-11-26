@@ -91,6 +91,7 @@ public class MechController : MonoBehaviour, IDamageable
     private float previousVerticalVelocity;
     private bool wasGrounded;
     private float footstepTimer;
+    private float pendingYawRotation;
 
     Rigidbody rb;
     private Collider bodyCollider;
@@ -223,6 +224,13 @@ public class MechController : MonoBehaviour, IDamageable
         {
             velocity.x = dashDirection.x * dashSpeed;
             velocity.z = dashDirection.z * dashSpeed;
+        }
+
+        rb.angularVelocity = Vector3.zero;
+        if (pendingYawRotation != 0f)
+        {
+            rb.MoveRotation(rb.rotation * Quaternion.Euler(0f, pendingYawRotation, 0f));
+            pendingYawRotation = 0f;
         }
 
         rb.linearVelocity = velocity;
@@ -374,7 +382,7 @@ public class MechController : MonoBehaviour, IDamageable
         }
         else
         {
-            transform.Rotate(Vector3.up * mouseX);
+            pendingYawRotation += mouseX;
 
             mainCameraPitch = Mathf.Clamp(
                 mainCameraPitch - mouseY,
