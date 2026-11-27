@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
         hasHit = true;
         if (other.CompareTag("Enemy"))
         {
-            other.GetComponent<enemyAI>().TakeDamage(damage);
+            other.GetComponent<EnemyHealthHandler>().TakeDamage(damage);
         }
 
         if (other.CompareTag("Explosive"))
